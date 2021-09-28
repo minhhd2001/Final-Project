@@ -5,11 +5,12 @@ const user = require('../model/users.model');
 // const course = require('../model/courses.model');
 async function connect() {
     try {
-        await mongoose.connect(`mongodb+srv://group5:group5@cluster0.4caia.mongodb.net/group5?retryWrites=true&w=majority`);
+        // mongodb+srv://group5:group5@cluster0.4caia.mongodb.net/group5?retryWrites=true&w=majority
+        await mongoose.connect(`mongodb:${process.env.DB_HOST}/${process.env.DB_NAME}`);
         console.log('Connected successful !');
-        role.initialize;
-        category.initialize;
-        user.initialize;
+        await role.initialize;
+        await category.initialize;
+        await user.initialize;
         // course.initialize;
     }
     catch(err) {

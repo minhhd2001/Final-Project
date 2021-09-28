@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 const categoryModel = category.model;
 
 const course = new Schema({
-    name : { type: String, minlength: 1, maxlength: 50 },
+    name : { type: String, min: 1, max: 50 },
     description : { type: String},
     idCategory : {type: Schema.Types.ObjectId, ref: 'categories'},
-    idTeacher : {type: Schema.Types.ObjectId, ref: 'users'},
-    idStd: [{type: Schema.Types.ObjectId, ref: 'users'}]
+    idTeacher : {type: Number, ref: 'users'},
+    idStd: [{type: Number, ref: 'users'}]
 },{
     timestamps : { currentTime: () => Math.floor(Date.now() / 1000) },
 });

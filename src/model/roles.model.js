@@ -5,7 +5,7 @@ const roles = new Schema({
     name:{ 
         type: String,
         unique: true,
-        minLength: 1,
+        min: 1,
     }
 },{
     timestamps : { currentTime: () => Math.floor(Date.now() / 1000) },

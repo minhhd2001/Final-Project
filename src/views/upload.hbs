@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload</title>
+</head>
+<body>
+    <form action="/trainer/updateprofile" method="post" enctype="multipart/form-data">
+        <label for="name">Name</label>
+        <br>
+        <input type="text" name ="name">
+        <br>
+        <label for="phone">Phone</label>
+        <br>
+        <input type="text" name ="phone">
+        <br>
+        <label for="address">Address</label>
+        <br>
+        <input type="text" name ="address">
+        <br>
+        <label for="age">Age</label>
+        <br>
+        <input type="text" name ="age">
+        <br>
+        <input type="file" name ="uploaded_file" accept="image/*">
+        <br>
+        <input type="submit" value ="Upload">
+    </form>
+</body>
+</html>

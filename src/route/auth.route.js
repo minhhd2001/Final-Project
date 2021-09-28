@@ -1,7 +1,12 @@
-// const express = require('express');
-// const router = express.Router();
-// const auth = require('../controller/auth.controller');
+const express = require('express');
+const router = express.Router();
+const auth = require('../controller/auth.controller');
 
-// router.post('/login', auth.login);
+router.post('/login', auth.login);
 
-// module.exports = router;
+router.post('/refreshtoken', auth.refreshToken);
+
+router.delete('/logout', auth.logout);
+
+
+module.exports = router;

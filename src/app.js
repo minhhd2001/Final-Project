@@ -1,15 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('./config/db');
-const auth = require('./controller/auth.controller')
-// const route = require('./route');
+const route = require('./route');
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extension: true}));
+app.use(express.urlencoded({ extended: true })) 
+app.set('view engine', 'hbs');
+app.use(express.static('../public'))
+
+
 
 const run = async ()=>{
-    db.connect();
-    app.get('/', auth)
+    await db.connect();
+    app.use('/', route)
 }
 
 run();
