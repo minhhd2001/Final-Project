@@ -4,7 +4,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const mongooseDelete = require('mongoose-delete');
 const roles = require('./roles.model');
 const rolesModel = roles.model;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const user = new Schema({
     _id: Number,
