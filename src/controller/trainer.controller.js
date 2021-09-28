@@ -5,7 +5,7 @@ const Course = require('../model/courses.model');
 const update = async (req, res, next) => {
     const avatar = req.file;
     console.log(avatar);
-    await User.updateOne({$and:[{_id: 2},{role: 'trainer'}]},{
+    await User.updateOne({$and:[{_id: req.id},{role: 'trainer'}]},{
         avatar: avatar,
         phone : req.body.phone,
         address: req.body.address,
