@@ -1,6 +1,5 @@
-h1{
-    color: blue;
-}
-div{
-    font-size: 16px;
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }

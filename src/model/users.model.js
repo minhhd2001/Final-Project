@@ -49,6 +49,42 @@ function initialize() {
                         if(err) console.log(err);
                         else console.log('Add admin user !');
                     })
+                    new userModel({
+                        name: 'trainer',
+                        email : 'trainer@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 19, 
+                        phone : '0123321123',
+                        address: 'Hải Phòng',
+                        role : 'trainer'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainer user !');
+                    })
+                    new userModel({
+                        name: 'trainee',
+                        email : 'trainee@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 19, 
+                        phone : '0998877665',
+                        address: 'Sài Gòn',
+                        role : 'trainee'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainee user !');
+                    })
+                    new userModel({
+                        name: 'trainee2',
+                        email : 'trainee2@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 20, 
+                        phone : '0998877663',
+                        address: 'Sài Gòn',
+                        role : 'trainee'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainee2 user !');
+                    })
                 }
             })
         }
