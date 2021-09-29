@@ -29,9 +29,9 @@ const store = (req, res, next) => {
 //[GET] /staff/viewCategory
 const show = async(req, res, next) => {
     await Categories.find({})
-        .then(courses => {
+        .then(categories => {
             res.render('viewCategory', {
-                courses: courses,
+                categories: categories,
             })
         })
         .catch(next);
@@ -40,9 +40,9 @@ const show = async(req, res, next) => {
 //[GET] /staff/viewCategory/:id/edit
 const edit = (req, res, next) => {
     Categories.findOne({ _id: req.params.id })
-        .then(course => {
+        .then(category => {
             res.render('editCategory', {
-                course: course,
+                category: category,
             })
         })
         .catch(next)
@@ -58,20 +58,20 @@ const update = (req, res, next) => {
 //[GET] /staff/viewCategory/search
 const search = async(req, res, next) => {
     const category = await Categories.findOne({name : req.query.search})
-            .then(course =>{
-                return course
+            .then(category =>{
+                return category
             })
             .catch(next)
         if(category){
             return res.render('viewCategory',{
-                course: category,
+                category: category,
             })
         }
         const searchCategory = new RegExp(req.query.search, 'i')
         await Categories.find({name : searchCategory})
-            .then(courses =>{
+            .then(categories =>{
                 res.render('viewCategory',{
-                    courses: courses,
+                    categories: categories,
                 })
             })
             .catch(next)    

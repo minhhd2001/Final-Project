@@ -13,10 +13,10 @@
 
 <body>
     <div class="container">
-        <form class="mt-5" method="post" action="/staff/viewCategory/{{course._id}}?_method=PUT">
+        <form class="mt-5" method="post" action="/staff/viewCategory/{{category._id}}?_method=PUT">
             <div class="mb-3">
                 <label for="name" class="form-label">Name Category</label>
-                <input type="text" value="{{course.name}}" class="form-control" name="name" id="name">
+                <input type="text" value="{{category.name}}" class="form-control" name="name" id="name">
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
