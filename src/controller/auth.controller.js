@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = users.model;
 
-const tokenSecret = process.env.TOKEN_SECRET_KEY || '';
-const refreshSecret = process.env.REFRESH_SECRET_KEY || '';
-const tokenExpired = process.env.TOKEN_EXPIRED || '';
-const refreshExpired = process.env.REFRESH_EXPIRED || '';
+const tokenSecret = 'group5'
+const refreshSecret = 'bro';
+const tokenExpired = '1h';
+const refreshExpired ='3h';
 
 const login = async (req, res, next) => {
     try{

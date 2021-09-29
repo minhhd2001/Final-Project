@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const tokenSecret = process.env.TOKEN_SECRET_KEY || '';
+const tokenSecret = 'group5';
 
 const verifyToken = function (req, res, next){
     const token = req.headers.authorization;
@@ -13,28 +13,28 @@ const verifyToken = function (req, res, next){
     })
 }
 
-const idAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
     const role = req.role;
     if(role === 'admin') {
         next();
     } else return res.send(401);
 }
 
-const idStaff = (req, res, next) => {
+const isStaff = (req, res, next) => {
     const role = req.role;
     if(role === 'staff') {
         next();
     } else return res.send(401);
 }
 
-const idTrainer = (req, res, next) => {
+const isTrainer = (req, res, next) => {
     const role = req.role;
     if(role === 'trainer') {
         next();
     } else return res.send(401);
 }
 
-const idTrainee = (req, res, next) => {
+const isTrainee = (req, res, next) => {
     const role = req.role;
     if(role === 'trainee') {
         next();
@@ -43,10 +43,10 @@ const idTrainee = (req, res, next) => {
 
 const authenticate = {
     verifyToken,
-    idAdmin,
-    idStaff,
-    idTrainer,
-    idTrainee,
+    isAdmin,
+    isStaff,
+    isTrainer,
+    isTrainee,
 }
 
 module.exports = authenticate;

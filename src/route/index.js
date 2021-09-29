@@ -13,5 +13,8 @@ router.use('/trainer', trainer);
 router.use('/profile',  profile);
 router.use('/staff', staff);
 
+router.get('/upload', (req, res, next) => {
+    res.render('upload')
+})
 
 module.exports = router;
