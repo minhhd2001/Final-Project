@@ -3,7 +3,8 @@ const User = users.model;
 
 const profile = async (req, res, next) => {
     let user;
-    await User.findOne({_id: req.id}).then(function (result) {
+    await User.findOne({_id: 2}).then(function (result) {
+        if(!result) return res.send(404);
         user = {
             email: result.email,
             name: result.name,

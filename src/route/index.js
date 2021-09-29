@@ -11,5 +11,8 @@ router.use('/auth', auth);
 router.use('/trainer', trainer);
 router.use('/profile',  profile);
 
+router.get('/upload', (req, res, next) => {
+    res.render('upload')
+})
 
 module.exports = router;

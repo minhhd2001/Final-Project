@@ -2,7 +2,7 @@ const multer = require('multer');
 const uniqid = require('uniqid');
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: function (req, file, cb) {
         cb(null, './public/images/');
     },
     filename: (req, file, cb) => {
@@ -14,4 +14,4 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-module.exports = { upload };
+module.exports = upload;
