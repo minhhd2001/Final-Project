@@ -35,8 +35,8 @@
                 </tr>
             </thead>
             <tbody>
-            {{#if courses}}
-                {{#each courses}}
+            {{#if categories}}
+                {{#each categories}}
                 <tr>
                     <th>{{sum @index}}</th>
                     <td>{{this.name}}</td>
@@ -49,17 +49,17 @@
                 </tr>
                 {{else}}
                 <tr>
-                    <td colspan="4" class="text-center">You don't have a course category yet.</td>
+                    <td colspan="4" class="text-center">You don't have a category yet.</td>
                 </tr>
                 {{/each}}
             {{else}}
-                {{#if course}}
+                {{#if category}}
                 <tr>
                     <th>1</th>
-                    <td>{{course.name}}</td>
-                    <td>{{course.createdAt}}</td>
+                    <td>{{category.name}}</td>
+                    <td>{{category.createdAt}}</td>
                     <td>
-                        <a href="/staff/viewCategory/{{course._id}}/edit">Edit</a>
+                        <a href="/staff/viewCategory/{{category._id}}/edit">Edit</a>
                         <a href="">Delete</a>
                     </td>
                 </tr>
@@ -83,7 +83,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this course category?
+                    Are you sure you want to delete this category?
                 </div>
                 <div class="modal-footer">
                     <button id="btn-delete-category" type="button" class="btn btn-danger">Confirm</button>
