@@ -31,6 +31,7 @@ const login = async (req, res, next) => {
         const refreshToken = jwt.sign(userData, refreshSecret,{
             expiresIn: refreshExpired
         })
+
         req.headers.authorization = token;
 
         const checkTokenExist = await userToken.findOne({idUser: userData.id})
@@ -52,11 +53,7 @@ const login = async (req, res, next) => {
         const role = userData.role;
         switch(role){
             case 'admin':
-                res.json({
-                    token : token,
-                    refreshToken : refreshToken,
-                    role : 'admin',
-                })
+                res.redirect('/profile')
             break;
             case 'staff':
                 res.json({
@@ -111,6 +108,7 @@ const logout = async(req, res, next)=>{
         console.log(err);
     }
 }
+
 const refreshToken = async (req, res, next)=>{
     const token = req.headers.authorization;
     const {refreshToken} = req.body;
@@ -129,6 +127,7 @@ const refreshToken = async (req, res, next)=>{
             .catch((err)=> {
                 res.send(err);
             })
+            
     if(!result || !(refreshToken === result.refreshToken)){
         return res.send('Unauthorized users');
      }
