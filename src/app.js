@@ -5,6 +5,7 @@ const methodOverride = require('method-override');
 const path = require('path');
 const app = express();
 const hbs = require('hbs')
+const session = require('express-session')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })) 
@@ -18,7 +19,12 @@ hbs.registerPartials(__dirname + '/views/partials')
 hbs.registerHelper("sum", (count) =>{
     return count + 1;
 })
+app.use(session({
+    resave: true,
+    saveUninitialized: false,
+    secret: 'Group5', 
 
+}))
 const run = async ()=>{
     await db.connect();
     app.use('/', route)

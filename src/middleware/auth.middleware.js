@@ -1,16 +1,30 @@
-const jwt = require('jsonwebtoken');
+const verifyUser = (req, res, next)=>{
+    const user = req.session.user;
+    if(!user) return res.send(401);
+    req.id = user.id;
+    req.role = user.role;
+    next();
+}
 
-const tokenSecret = 'group5';
-
-const verifyToken = function (req, res, next){
-    const token = req.headers.authorization;
-    if(!token) return res.send(401);
-    jwt.verify(token, tokenSecret, function (err, decode) {
-        if(err) return res.send(err);
-        req.role = decode.role;
-        req.id = decode.id;
-        next();
-    })
+const checkLogout = (req, res, next) => {
+    const user = req.session.user;
+    if(!user) next();
+    else{
+        switch(user.role){
+            case 'admin':
+                res.redirect('/profile')
+            break;
+            case 'staff':
+                res.redirect('/staff');
+            break;
+            case 'trainer':
+                res.redirect('/profile')
+            break;
+            default :
+                res.redirect('/profile')
+            break;
+        }
+    }
 }
 
 const isAdmin = (req, res, next) => {
@@ -42,7 +56,8 @@ const isTrainee = (req, res, next) => {
 }
 
 const authenticate = {
-    verifyToken,
+    verifyUser,
+    checkLogout,
     isAdmin,
     isStaff,
     isTrainer,
