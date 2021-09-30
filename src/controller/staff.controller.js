@@ -3,14 +3,14 @@ const Categories = require('../model/categories.model').model;
 //[GET] /staff
 const index = (req, res, next) => {
 
-    res.render('staff');
+    res.render('staff/index');
 }
 
 //>>>>>>>>>>>>>>>>>>>HANDLE CATEGORY<<<<<<<<<<<<<<<<<<<<<<<
 //[GET] /staff/viewCategory/create
 const create = (req, res, next) => {
 
-    res.render('createCategory');
+    res.render('staff/categories/createCategory');
 }
 
 //[POST] /staff/viewCategory/store
@@ -30,7 +30,7 @@ const store = (req, res, next) => {
 const show = async(req, res, next) => {
     await Categories.find({})
         .then(courses => {
-            res.render('viewCategory', {
+            res.render('staff/categories/viewCategory', {
                 courses: courses,
             })
         })
@@ -41,7 +41,7 @@ const show = async(req, res, next) => {
 const edit = (req, res, next) => {
     Categories.findOne({ _id: req.params.id })
         .then(course => {
-            res.render('editCategory', {
+            res.render('staff/categories/editCategory', {
                 course: course,
             })
         })
@@ -63,14 +63,14 @@ const search = async(req, res, next) => {
             })
             .catch(next)
         if(category){
-            return res.render('viewCategory',{
+            return res.render('staff/categories/viewCategory',{
                 course: category,
             })
         }
         const searchCategory = new RegExp(req.query.search, 'i')
         await Categories.find({name : searchCategory})
             .then(courses =>{
-                res.render('viewCategory',{
+                res.render('staff/categories/viewCategory',{
                     courses: courses,
                 })
             })

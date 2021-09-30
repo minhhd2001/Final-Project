@@ -13,6 +13,8 @@ app.use(methodOverride('_method'))
 app.use(express.static('public'))
 app.set('views', path.join(__dirname, 'views'))
 
+hbs.registerPartials(__dirname + '/views/partials')
+
 hbs.registerHelper("sum", (count) =>{
     return count + 1;
 })
@@ -21,7 +23,6 @@ const run = async ()=>{
     await db.connect();
     app.use('/', route)
 }
-
 
 run();
 
