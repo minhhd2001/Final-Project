@@ -9,20 +9,15 @@ const router = express.Router();
 
 // router.use('/admin', admin);
 router.use('/trainer', trainer);
-<<<<<<< HEAD
-router.use('/profile',  profile);
-=======
-router.use('/staff', staff);
 router.use('/profile', authenticate.verifyUser,  profile);
->>>>>>> 5a53d46477621590e8dc6177368722e9ce71ce56
 router.use('/staff',authenticate.verifyUser, authenticate.isStaff, staff);
 
 router.get('/upload', (req, res, next) => {
     res.render('upload')
 })
 router.use('/', auth);
-router.use('/:slug', (req, res, next) => {
-    res.send('Not found page')
-});
+// router.use('/:slug', (req, res, next) => {
+//     res.send('Not found page')
+// });
 
 module.exports = router;

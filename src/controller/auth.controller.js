@@ -23,10 +23,11 @@ const login = async (req, res, next) => {
     }
     const userData = {
       id: userInDB.id,
-      name: userInDB.name,
+      email: userInDB.email,
       role: userInDB.role,
       avatar : userInDB.avatar,
     };
+    
     req.session.user = userData;
 
     const role = userData.role;

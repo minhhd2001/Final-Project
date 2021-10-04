@@ -3,7 +3,13 @@ const course = require('./course.controller')
 
 //[GET] /staff
 const index = (req, res, next) => {
-    res.render('staff/index');
+    // console.log(req.email)
+    res.render('staff/index',{
+        role: 'Staff',
+        link: '/staff', 
+        avatar: req.avatar, 
+        email: req.email
+    });
 }
 
 

@@ -1,9 +1,10 @@
+
 const verifyUser = (req, res, next)=>{
     const user = req.session.user;
-    if(!user) return res.send(401);
+    if(!user) return res.redirect('/');
     req.id = user.id;
     req.role = user.role;
-    req.name = user.name;
+    req.email = user.email;
     req.avatar = user.avatar;
     next();
 }

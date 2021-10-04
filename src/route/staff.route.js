@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const authenticate = require('../middleware/auth.middleware')
+
+
 const staffController = require('../controller/staff/staff.controller');
 
 // Router CATEGORY  
