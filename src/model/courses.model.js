@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const categoryModel = category.model;
 
 const course = new Schema({
-    name : { type: String, min: 1, max: 50 },
+    name : { type: String, min: 1, max: 50, unique: true},
     description : { type: String},
     idCategory : {type: Schema.Types.ObjectId, ref: 'category'},
     idTrainer : {type: Number, ref: 'user'},

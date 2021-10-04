@@ -3,6 +3,8 @@ const verifyUser = (req, res, next)=>{
     if(!user) return res.send(401);
     req.id = user.id;
     req.role = user.role;
+    req.name = user.name;
+    req.avatar = user.avatar;
     next();
 }
 
