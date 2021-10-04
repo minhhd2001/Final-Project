@@ -1,12 +1,6 @@
-const Categories = require('../model/categories.model').model;
+const Categories = require('../../model/categories.model').model;
+const Courses = require('../../model/courses.model');
 
-//[GET] /staff
-const index = (req, res, next) => {
-
-    res.render('staff/index');
-}
-
-//>>>>>>>>>>>>>>>>>>>HANDLE CATEGORY<<<<<<<<<<<<<<<<<<<<<<<
 //[GET] /staff/viewCategory/create
 const create = (req, res, next) => {
 
@@ -78,13 +72,23 @@ const search = async(req, res, next) => {
 }
 
 //[DELETE] /staff/viewCategory/:id
-const destroy = (req, res, next) => {
-    confirm('hi')
+const destroy = async(req, res, next) => {
+    let courses = await Courses.find({idCategory: req.params.id})
+        .then(courses => {
+            return courses
+        })
+        .catch(next) 
+    if(courses.length) {
+        return res.send('A course already exists in this category. Please delete the course first')
+    }
+    Categories.deleteOne({ _id: req.params.id})
+        .then(() => {
+            res.redirect('/staff/viewCategory')
+        })
+        .catch(next)       
 }
 
-
-const staff = {
-    index,
+const category = {
     create,
     store,
     show,
@@ -93,4 +97,5 @@ const staff = {
     search,
     destroy,
 }
-module.exports = staff;
+
+module.exports = category

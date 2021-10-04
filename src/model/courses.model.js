@@ -8,13 +8,13 @@ const course = new Schema({
     name : { type: String, min: 1, max: 50, unique: true},
     description : { type: String},
     idCategory : {type: Schema.Types.ObjectId, ref: 'category'},
-    idTrainer : {type: Number, ref: 'user'},
-    idTrainee: [{type: Number, ref: 'user'}]
+    idTrainer : {type: Number, ref: 'user', default: ''},
+    idTrainee: [{type: Number, ref: 'user', default: []}]
 },{
     timestamps : { currentTime: () => Math.floor(Date.now() / 1000) },
 });
 
-course.plugin(mongooseDelete,{overrideMethod: 'all', deleteAt: true});
+course.plugin(mongooseDelete, { overrideMethods: 'all', deletedAt: true});
 
 module.exports = mongoose.model('courses', course);
 
