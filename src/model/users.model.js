@@ -50,7 +50,7 @@ function initialize() {
                         else console.log('Add admin user !');
                     })
                     new userModel({
-                        name: 'trainer',
+                        name: 'Nguyễn Thạc Huy',
                         email : 'trainer@fpt.edu.vn',
                         password : passwordHash,
                         age: 19, 
@@ -62,7 +62,7 @@ function initialize() {
                         else console.log('Add trainer user !');
                     })
                     new userModel({
-                        name: 'trainee',
+                        name: 'Nguyễn Thạc Hằng',
                         email : 'trainee@fpt.edu.vn',
                         password : passwordHash,
                         age: 19, 
@@ -74,7 +74,7 @@ function initialize() {
                         else console.log('Add trainee user !');
                     })
                     new userModel({
-                        name: 'trainee2',
+                        name: 'Nguyễn Đức Huy',
                         email : 'trainee2@fpt.edu.vn',
                         password : passwordHash,
                         age: 20, 
@@ -84,6 +84,78 @@ function initialize() {
                     }).save((err)=>{
                         if(err) console.log(err);
                         else console.log('Add trainee2 user !');
+                    })
+                    new userModel({
+                        name: 'Nguyễn Ánh Dương',
+                        email : 'trainee3@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 20, 
+                        phone : '0998877611',
+                        address: 'Sài Gòn',
+                        role : 'trainee'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainee3 user !');
+                    })
+                    new userModel({
+                        name: 'Nguyễn Thu Trang',
+                        email : 'trainee4@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 21, 
+                        phone : '0338877622',
+                        address: 'Hà Nội',
+                        role : 'trainee'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainee4 user !');
+                    })
+                    new userModel({
+                        name: 'Nguyễn Trà My',
+                        email : 'trainee5@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 20, 
+                        phone : '0338877633',
+                        address: 'Ninh Bình',
+                        role : 'trainee'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainee5 user !');
+                    })
+                    new userModel({
+                        name: 'Nguyễn Tài Phúc',
+                        email : 'trainee6@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 19, 
+                        phone : '0338877644',
+                        address: 'Ninh Bình',
+                        role : 'trainee'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainee6 user !');
+                    })
+                    new userModel({
+                        name: 'Nguyễn Thu Hương',
+                        email : 'trainer2@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 20, 
+                        phone : '0998877622',
+                        address: 'Hà Nội',
+                        role : 'trainer'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainer2 user !');
+                    })
+                    new userModel({
+                        name: 'Nguyễn Gia Huy',
+                        email : 'trainer3@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 20, 
+                        phone : '099887767',
+                        address: 'Hà Nội',
+                        role : 'trainer'
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add trainer3 user !');
                     })
                 }
             })

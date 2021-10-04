@@ -18,6 +18,21 @@ hbs.registerPartials(__dirname + '/views/partials')
 hbs.registerHelper("sum", (count) =>{
     return count + 1;
 })
+hbs.registerHelper("compare",(a, b) => {
+    if(String(a) == String(b)){
+        return true;
+    }
+    return false;
+})
+hbs.registerHelper("match",(a, b) => {
+    let c = b.some((b)=>{
+        return b == a
+    })
+    if(c) {
+        return false;
+    }
+    return true;
+})
 
 const run = async ()=>{
     await db.connect();

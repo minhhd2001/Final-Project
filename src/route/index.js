@@ -11,7 +11,7 @@ const router = express.Router();
 router.use('/auth', auth);
 // router.use('/admin', admin);
 router.use('/trainer', trainer);
-router.use('/profile',authenticate.verifyToken,  profile);
+router.use('/profile',  profile);
 router.use('/staff', staff);
 router.use('/login', login);
 
