@@ -57,7 +57,7 @@ function initialize() {
 
 const Users = {
     model : userModel,
-    initialize: initialize(),
+    initialize: initialize,
 }
 module.exports = Users;
 

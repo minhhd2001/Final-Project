@@ -8,7 +8,7 @@ const update = async (req, res, next) => {
   try {
     const avatar = req.file.filename;
     await User.updateOne(
-      { $and: [{ _id: 2 }, { role: "trainer" }] },
+      { $and: [{ _id: req.id }, { role: "trainer" }] },
       {
         avatar: avatar,
         phone: req.body.phone,
@@ -17,8 +17,7 @@ const update = async (req, res, next) => {
         name: req.body.name,
       }
     )
-      .then(() => res.redirect("/profile"))
-      .catch(next);
+    res.redirect("/profile");
   } catch (err) {
     console.log(err);
   }
@@ -26,21 +25,9 @@ const update = async (req, res, next) => {
 
 const showCourses = async (req, res, next) => {
   try {
-    const coursesDB = await Course.find({ idTrainer: 2 })
-      .then((results) => {
-        return results;
-      })
-      .catch((err) => {
-        res.send(err);
-      });
+    const coursesDB = await Course.find({ idTrainer: req.id })
     for (let course of coursesDB) {
       let category = await Category.findOne({ _id: course.idCategory })
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => {
-          return res.send(err);
-        });
       course.category = category.name;
     }
     const courses = coursesDB.map((courseDB) => {
@@ -53,10 +40,6 @@ const showCourses = async (req, res, next) => {
       };
     });
     const categories = await Category.find({})
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     res.render('trainer/showCourses', {
       courses,
       categories,
@@ -78,18 +61,8 @@ const showCoursesInCategory = async (req, res, next) => {
     const coursesDB = await Course.find({
       $and: [{ idTrainer: 2 }, { idCategory }],
     })
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     for (let course of coursesDB) {
       let category = await Category.findOne({ _id: course.idCategory })
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => {
-          return res.send(err);
-        });
       course.category = category.name;
     }
     const courses = coursesDB.map((courseDB) => {
@@ -102,10 +75,6 @@ const showCoursesInCategory = async (req, res, next) => {
       };
     });
     const categories = await Category.find({})
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     res.render('trainer/showCourses', {
       courses,
       idCategory,
@@ -125,17 +94,9 @@ const showTrainees = async (req, res, next) => {
     const id = req.params.id;
     if (!id.match(/^[0-9a-fA-F]{24}$/)) return res.send("No courses found");
     const courseDB = await Course.findOne({ _id: req.params.id })
-      .then((result) => {
-        return result;
-      })
-      .catch(next);
     const traineesDB = await User.find({
       $and: [{ _id: { $in: courseDB.idTrainee } }, { role: "trainee" }],
     })
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     if (traineesDB.length == 0)
       return res.send("The course has no students yet");
     const trainees = traineesDB.map((traineeDB) => {
@@ -159,62 +120,32 @@ const showTrainees = async (req, res, next) => {
 
 const searchCourses = async (req, res, next) => {
   try {
+    let course;
+    let courses;
     const courseDB = await Course.findOne({
-      $and: [{ idTrainer: 2 }, { name: req.query.name }],
+      $and: [{ idTrainer: req.id }, { name: req.query.name }],
     })
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     const categories = await Category.find({})
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     if (courseDB) {
       const categoryDB = await Category.findOne({ _id: courseDB.idCategory })
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => {
-          return res.send(err);
-        });
       courseDB.category = categoryDB.name;
-      const course = {
+      course = {
         id: courseDB.id,
         name: courseDB.name,
         category: courseDB.category,
         description: courseDB.description,
         quantity: courseDB.idTrainee.length,
       };
-      return res.render('trainer/showCourses', {
-        course,
-        categories,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email
-      });;
     } else {
       const searchName = new RegExp(req.query.name, "i");
       const coursesDB = await Course.find({
-        $and: [{ idTrainer: 2 }, { name: searchName }],
+        $and: [{ idTrainer: req.id }, { name: searchName }],
       })
-        .then((results) => {
-          return results;
-        })
-        .catch(next);
       for (let course of coursesDB) {
         let categoriesDB = await Category.findOne({ _id: course.idCategory })
-          .then((result) => {
-            return result;
-          })
-          .catch((err) => {
-            return res.send(err);
-          });
         course.category = categoriesDB.name;
       }
-      const courses = coursesDB.map((courseDB) => {
+      courses = coursesDB.map((courseDB) => {
         return {
           id: courseDB.id,
           name: courseDB.name,
@@ -223,15 +154,16 @@ const searchCourses = async (req, res, next) => {
           quantity: courseDB.idTrainee.length,
         };
       });
-      res.render('trainer/showCourses', {
-        courses,
-        categories,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email
-      });;
     }
+    res.render('trainer/showCourses', {
+      course,
+      courses,
+      categories,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email
+    });;
   } catch (err) {
     next(err);
   }
@@ -239,73 +171,43 @@ const searchCourses = async (req, res, next) => {
 
 const searchCoursesInCategory = async (req, res, next) => {
   try {
+    let courses;
+    let course;
     const idCategory = req.params.idCategory;
     if (!idCategory.match(/^[0-9a-fA-F]{24}$/))
       return res.send("No courses found");
     const courseDB = await Course.findOne({
       $and: [
-        { idTrainer: 2 },
+        { idTrainer: req.id },
         { name: req.query.name },
         { idCategory: idCategory },
       ],
     })
-      .then((results) => {
-        return results;
-      })
-      .catch(next);
     const categories = await Category.find({})
-      .then((results) => {
-        return results;
-      })
     if (courseDB) {
       const categoryDB = await Category.findOne({ _id: courseDB.idCategory })
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => {
-          return res.send(err);
-        });
       courseDB.category = categoryDB.name;
-      const course = {
+      course = {
         id: courseDB.id,
         name: courseDB.name,
         category: courseDB.category,
         description: courseDB.description,
         quantity: courseDB.idTrainee.length,
       };
-      return res.render('trainer/showCourses', {
-        course,
-        categories,
-        idCategory,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email
-      });;
     } else {
       const searchName = new RegExp(req.query.name, "i");
       const coursesDB = await Course.find({
         $and: [
-          { idTrainer: 2 },
+          { idTrainer: req.id },
           { name: searchName },
           { idCategory: idCategory },
         ],
       })
-        .then((results) => {
-          return results;
-        })
-        .catch(next);
       for (let course of coursesDB) {
         let categoriesDB = await Category.findOne({ _id: course.idCategory })
-          .then((result) => {
-            return result;
-          })
-          .catch((err) => {
-            return res.send(err);
-          });
         course.category = categoriesDB.name;
       }
-      const courses = coursesDB.map((courseDB) => {
+      courses = coursesDB.map((courseDB) => {
         return {
           id: courseDB.id,
           name: courseDB.name,
@@ -314,16 +216,17 @@ const searchCoursesInCategory = async (req, res, next) => {
           quantity: courseDB.idTrainee.length,
         };
       });
-      res.render('trainer/showCourses', {
-        courses,
-        categories,
-        idCategory,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email
-      });;
     }
+    res.render('trainer/showCourses', {
+      course,
+      courses,
+      categories,
+      idCategory,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email
+    });;
   } catch (err) {
     next(err);
   }
@@ -334,11 +237,8 @@ const searchTrainees = async (req, res, next) => {
     let trainees;
     const id = req.params.id;
     if (!id.match(/^[0-9a-fA-F]{24}$/)) return res.send("No courses found");
-    const idTrainees = await Course.findOne({ _id: id })
-      .then((result) => {
-        return result.idTrainee;
-      })
-      .catch(next);
+    const Trainees = await Course.findOne({ _id: id })
+    const idTrainees = Trainees.idTrainees;
     if (!isNaN(req.params.search)) {
       const traineeByAgeDB = await User.find({
         $and: [
@@ -347,10 +247,6 @@ const searchTrainees = async (req, res, next) => {
           { age: req.params.search },
         ],
       })
-        .then((result) => {
-          return result;
-        })
-        .catch(next);
       if (traineeByAgeDB.length > 0) {
         trainees = traineeByAgeDB.map((traineeDB) => {
           return {
@@ -369,10 +265,6 @@ const searchTrainees = async (req, res, next) => {
           { name: req.params.search },
         ],
       })
-        .then((result) => {
-          return result;
-        })
-        .catch();
       if (traineeByNameDB.length > 0) {
         trainees = traineeByNameDB.map((traineeDB) => {
           return {
@@ -391,10 +283,6 @@ const searchTrainees = async (req, res, next) => {
             { name: searchName },
           ],
         })
-          .then((result) => {
-            return result;
-          })
-          .catch();
         if (traineeByNameExtendDB.length > 0) {
           trainees = traineeByNameExtendDB.map((traineeDB) => {
             return {

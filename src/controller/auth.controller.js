@@ -39,7 +39,7 @@ const login = async (req, res, next) => {
         res.redirect("/staff");
         break;
       case "trainer":
-        res.redirect("/profile");
+        res.redirect("/trainer");
 
         break;
       default:
