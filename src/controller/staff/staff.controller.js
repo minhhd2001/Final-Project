@@ -5,9 +5,9 @@ const course = require('./course.controller')
 const index = (req, res, next) => {
     // console.log(req.email)
     res.render('staff/index',{
-        role: 'Staff',
-        link: '/staff', 
-        avatar: req.avatar, 
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
         email: req.email
     });
 }

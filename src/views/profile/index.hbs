@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .body-profile{
+            width: 700px;
+            margin: auto;
+            padding: 47px 0;
+        }
+        .body-profile .body-info{
+            padding-left: 55px;
+            font-size: 25px;
+
+        }
+        .body-info span{
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    {{> header}}
+    <div class="container">
+        <div class='text-center mt-5'>
+            <img src="images/{{user.avatar}}" alt="avatar" width= '250' height ='300'>
+        </div>
+        <div class="row body-profile">
+            <div class="col-6 body-info"><span>Name: </span>{{user.name}}</div>
+            <div class="col-6 body-info"><span>Email: </span>{{user.email}}</div>
+            <div class="col-6 body-info"><span>Age: </span>{{user.age}}</div>
+            <div class="col-6 body-info"><span>Phone: </span>{{user.phone}}</div>
+            <div class="col-6 body-info"><span>Address: </span>{{user.address}}</div>
+            <div class="col-6 body-info"><span>Role: </span>{{rolePage}}</div>
+        </div>
+    </div>
+    {{> footer}}
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

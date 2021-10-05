@@ -4,7 +4,7 @@ const User = users.model;
 
 const show = async (req, res, next) => {
   let user;
-  await User.findOne({ _id: 2 }).then(function (result) {
+  await User.findOne({ _id: req.id }).then(function (result) {
     if (!result) return res.send(401);
     user = {
       email: result.email,
@@ -16,11 +16,17 @@ const show = async (req, res, next) => {
       role: result.role,
     };
   });
-  res.render("index", { user });
+  res.render("profile/index", {
+    user,
+    rolePage: req.rolePage,
+    link: `/${req.role}`,
+    avatar: req.avatar,
+    email: req.email
+  });
 };
 
 const changePassword = async (req, res, next) => {
-  const userPassword = await User.findOne({ _id: 2 })
+  const userPassword = await User.findOne({ _id: req.id })
     .then((user) => {
       return user.password;
     })
@@ -28,18 +34,18 @@ const changePassword = async (req, res, next) => {
   if (!userPassword) return res.send(401);
   if (!bcrypt.compareSync(req.body.password, userPassword))
     return res.send("Password wrong !");
-    const salt = bcrypt.genSaltSync(10);
-    let passwordHash = bcrypt.hashSync(req.body.newPassword, salt);
-    await User.updateOne({ _id: 2}, { password: passwordHash })
-        .then(() => {
-            return res.send('Change successfully !');
-        })
-        .catch(next);
+  const salt = bcrypt.genSaltSync(10);
+  let passwordHash = bcrypt.hashSync(req.body.newPassword, salt);
+  await User.updateOne({ _id: req.id }, { password: passwordHash })
+    .then(() => {
+      return res.send('Change successfully !');
+    })
+    .catch(next);
 };
 
 const profile = {
-    show,
-    changePassword
+  show,
+  changePassword
 }
 
 module.exports = profile;

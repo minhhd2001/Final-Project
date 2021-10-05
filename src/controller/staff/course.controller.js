@@ -20,7 +20,11 @@ const show = async (req, res, next) => {
             res.render('staff/courses/viewCourses', {
                 courses: courses,
                 categories: categories,
-                countDocumentsDeleted
+                countDocumentsDeleted,
+                rolePage: req.rolePage,
+                link: `/${req.role}`,
+                avatar: req.avatar,
+                email: req.email
             })
         })
         .catch(next);

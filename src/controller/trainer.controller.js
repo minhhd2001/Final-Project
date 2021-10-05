@@ -43,7 +43,7 @@ const showCourses = async (req, res, next) => {
         });
       course.category = category.name;
     }
-    const course = coursesDB.map((courseDB) => {
+    const courses = coursesDB.map((courseDB) => {
       return {
         id: courseDB.id,
         name: courseDB.name,
@@ -57,9 +57,14 @@ const showCourses = async (req, res, next) => {
         return results;
       })
       .catch(next);
-    // truyền vào tên người dùng
-    const userName = req.name;
-    res.json(course);
+    res.render('trainer/showCourses', {
+      courses,
+      categories,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email
+    });
   } catch (err) {
     next(err);
   }
@@ -87,7 +92,7 @@ const showCoursesInCategory = async (req, res, next) => {
         });
       course.category = category.name;
     }
-    const course = coursesDB.map((courseDB) => {
+    const courses = coursesDB.map((courseDB) => {
       return {
         id: courseDB.id,
         name: courseDB.name,
@@ -101,9 +106,15 @@ const showCoursesInCategory = async (req, res, next) => {
         return results;
       })
       .catch(next);
-    // truyền vào tên người dùng
-    const userName = req.name;
-    res.json(course);
+    res.render('trainer/showCourses', {
+      courses,
+      idCategory,
+      categories,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email
+    });
   } catch (err) {
     next(err);
   }
@@ -149,8 +160,13 @@ const showTrainees = async (req, res, next) => {
 const searchCourses = async (req, res, next) => {
   try {
     const courseDB = await Course.findOne({
-      $and: [{ idTrainer: 2 }, { name: req.params.name }],
+      $and: [{ idTrainer: 2 }, { name: req.query.name }],
     })
+      .then((results) => {
+        return results;
+      })
+      .catch(next);
+    const categories = await Category.find({})
       .then((results) => {
         return results;
       })
@@ -171,9 +187,16 @@ const searchCourses = async (req, res, next) => {
         description: courseDB.description,
         quantity: courseDB.idTrainee.length,
       };
-      return res.json(course);
+      return res.render('trainer/showCourses', {
+        course,
+        categories,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email
+      });;
     } else {
-      const searchName = new RegExp(req.params.name, "i");
+      const searchName = new RegExp(req.query.name, "i");
       const coursesDB = await Course.find({
         $and: [{ idTrainer: 2 }, { name: searchName }],
       })
@@ -200,7 +223,14 @@ const searchCourses = async (req, res, next) => {
           quantity: courseDB.idTrainee.length,
         };
       });
-      res.json(courses);
+      res.render('trainer/showCourses', {
+        courses,
+        categories,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email
+      });;
     }
   } catch (err) {
     next(err);
@@ -215,7 +245,7 @@ const searchCoursesInCategory = async (req, res, next) => {
     const courseDB = await Course.findOne({
       $and: [
         { idTrainer: 2 },
-        { name: req.params.name },
+        { name: req.query.name },
         { idCategory: idCategory },
       ],
     })
@@ -223,6 +253,10 @@ const searchCoursesInCategory = async (req, res, next) => {
         return results;
       })
       .catch(next);
+    const categories = await Category.find({})
+      .then((results) => {
+        return results;
+      })
     if (courseDB) {
       const categoryDB = await Category.findOne({ _id: courseDB.idCategory })
         .then((result) => {
@@ -239,9 +273,17 @@ const searchCoursesInCategory = async (req, res, next) => {
         description: courseDB.description,
         quantity: courseDB.idTrainee.length,
       };
-      return res.json(course);
+      return res.render('trainer/showCourses', {
+        course,
+        categories,
+        idCategory,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email
+      });;
     } else {
-      const searchName = new RegExp(req.params.name, "i");
+      const searchName = new RegExp(req.query.name, "i");
       const coursesDB = await Course.find({
         $and: [
           { idTrainer: 2 },
@@ -272,7 +314,15 @@ const searchCoursesInCategory = async (req, res, next) => {
           quantity: courseDB.idTrainee.length,
         };
       });
-      res.json(courses);
+      res.render('trainer/showCourses', {
+        courses,
+        categories,
+        idCategory,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email
+      });;
     }
   } catch (err) {
     next(err);

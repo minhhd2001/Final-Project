@@ -2,10 +2,12 @@
 const verifyUser = (req, res, next)=>{
     const user = req.session.user;
     if(!user) return res.redirect('/');
+    const rolePage = user.role[0].toUpperCase() + user.role.substr(1);
     req.id = user.id;
     req.role = user.role;
     req.email = user.email;
     req.avatar = user.avatar;
+    req.rolePage = rolePage;
     next();
 }
 
