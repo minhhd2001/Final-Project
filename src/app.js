@@ -25,15 +25,6 @@ hbs.registerHelper("compare",(a, b) => {
     }
     return false;
 })
-hbs.registerHelper("match",(a, b) => {
-    let c = b.some((b)=>{
-        return b == a
-    })
-    if(c) {
-        return false;
-    }
-    return true;
-})
 app.use(session({
     resave: true,
     saveUninitialized: false,

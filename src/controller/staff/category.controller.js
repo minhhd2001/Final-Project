@@ -3,7 +3,12 @@ const Courses = require("../../model/courses.model");
 
 //[GET] /staff/viewCategory/create
 const create = (req, res, next) => {
-  res.render("staff/categories/createCategory");
+  res.render("staff/categories/createCategory", {
+    rolePage: req.rolePage,
+    link: `/${req.role}`,
+    avatar: req.avatar,
+    email: req.email,
+  });
 };
 
 //[POST] /staff/viewCategory/store
@@ -22,52 +27,91 @@ const store = async (req, res, next) => {
 const show = async (req, res, next) => {
   try {
     const categories = await Categories.find({})
+    let dateNow;
+    for(let category of categories) {
+      let date = new Date(category.createdAt * 1000);
+      if(date.getSeconds() < 10){
+         dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+      }else{
+         dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      }
+      category.dateCreated = dateNow;
+    }
     res.render("staff/categories/viewCategory", {
       categories: categories,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
     });
-  }catch (err) {
-      next(err);
+  } catch (err) {
+    next(err);
   }
 };
 
 //[GET] /staff/viewCategory/:id/edit
 const edit = async (req, res, next) => {
-  try{
+  try {
     const category = await Categories.findOne({ _id: req.params.id })
     res.render("staff/categories/editCategory", {
       category: category,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
     });
-  }catch(err){
-      next(err);
+  } catch (err) {
+    next(err);
   }
 };
 
 //[PUT] /staff/viewCategory/:id
 const update = async (req, res, next) => {
-  try{
+  try {
     await Categories.updateOne({ _id: req.params.id }, req.body)
     res.redirect("/staff/viewCategory")
-  }catch(err){
-      next(err);
+  } catch (err) {
+    next(err);
   }
 };
 
 //[GET] /staff/viewCategory/search
 const search = async (req, res, next) => {
   try {
-    const category = await Categories.findOne({ name: req.query.search })
+    const category = await Categories.findOne({ name: req.query.search.trim() })
+    let categories;
+    let dateNow;
     if (category) {
-      return res.render("staff/categories/viewCategory", {
-        category: category,
-      });
+      let date = new Date(category.createdAt * 1000);
+      if (date.getSeconds() < 10) {
+          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+      } else {
+          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      }
+      category.dateCreated = dateNow;
+    }else{
+      const searchCategory = new RegExp(req.query.search.trim(), "i");
+      categories = await Categories.find({ name: searchCategory })  
+      for (let category of categories) {
+        let date = new Date(category.createdAt * 1000);
+        if (date.getSeconds() < 10) {
+            dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+        } else {
+            dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        }
+        category.dateCreated = dateNow;              
+    }   
     }
-    const searchCategory = new RegExp(req.query.search, "i");
-    const categories = await Categories.find({ name: searchCategory })
-      res.render("staff/categories/viewCategory", {
-        categories: categories,
-      });
-  }catch (err) {
-      next(err);
+    res.render("staff/categories/viewCategory", {
+      category: category,
+      categories: categories,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -81,9 +125,9 @@ const destroy = async (req, res, next) => {
       );
     }
     await Categories.deleteOne({ _id: req.params.id })
-      res.redirect("/staff/viewCategory");
-  }catch (err) {
-      next(err);
+    res.redirect("/staff/viewCategory");
+  } catch (err) {
+    next(err);
   }
 };
 
