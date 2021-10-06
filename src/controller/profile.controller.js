@@ -65,10 +65,52 @@ const viewUpdate = async (req, res, next) => {
   })
 }
 const updateTrainee = async (req, res, next) => {
-  
+  try{
+    if(req.file){
+      const avatar = req.file.filename;
+      await User.updateOne(
+        { $and: [{ _id: req.id }, { role: "trainee" }] },
+        {
+          avatar
+        }
+      )
+      req.session.user.avatar = avatar;
+    }
+    res.redirect("/profile");
+  }catch(err){
+    next(err);
+  }
 }
 const updateAll = async (req, res, next) => {
-
+  try{
+    if(req.file){
+      const avatar = req.file.filename;
+      await User.updateOne(
+        { _id: req.id },
+        {
+          avatar,
+          phone: req.body.phone,
+          address: req.body.address,
+          age: req.body.age,
+          name: req.body.name,
+        }
+      )
+      req.session.user.avatar = avatar;
+    }else{
+      await User.updateOne(
+        { _id: req.id },
+        {
+          phone: req.body.phone,
+          address: req.body.address,
+          age: req.body.age,
+          name: req.body.name,
+        }
+      )
+    }
+    res.redirect('/profile');
+  }catch(err){
+    next(err);
+  }
 }
 
 const profile = {

@@ -4,25 +4,6 @@ const Course = require("../model/courses.model");
 const Category = categories.model;
 const User = users.model;
 
-const update = async (req, res, next) => {
-  try {
-    const avatar = req.file.filename;
-    await User.updateOne(
-      { $and: [{ _id: req.id }, { role: "trainer" }] },
-      {
-        avatar: avatar,
-        phone: req.body.phone,
-        address: req.body.address,
-        age: req.body.age,
-        name: req.body.name,
-      }
-    )
-    res.redirect("/profile");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 const showCourses = async (req, res, next) => {
   try {
     const coursesDB = await Course.find({ idTrainer: req.id })
@@ -325,7 +306,6 @@ const searchTrainees = async (req, res, next) => {
 };
 
 const trainer = {
-  update,
   showCourses,
   showCoursesInCategory,
   showTrainees,
