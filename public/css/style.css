@@ -3,7 +3,9 @@
     margin: 0;
     box-sizing: border-box;
 }
-
+.container{
+    min-height: 554px;
+}
 .header{
     background-color: #2B3494;
 }
