@@ -31,16 +31,27 @@ const show = async(req, res, next) => {
         .catch(next);
 }
 
-//[GET] /staff/viewCategory/:id/edit
+//[GET] /staff/viewStudent/:id/edit
 const edit = (req, res, next) => {
-    Categories.findOne({ _id: req.params.id })
-        .then(category => {
-            res.render('staff/categories/editCategory', {
-                category: category,
+    Students.findOne({ _id: req.params.id })
+        .then(student => {
+            res.render('staff/students/editStudent', {
+                student: student,
             })
         })
         .catch(next)
 }
+
+// //[GET] /staff/viewCategory/:id/edit
+// const edit = (req, res, next) => {
+//     Categories.findOne({ _id: req.params.id })
+//         .then(category => {
+//             res.render('staff/categories/editCategory', {
+//                 category: category,
+//             })
+//         })
+//         .catch(next)
+// }
 
 //[PUT] /staff/viewCategory/:id
 const update = (req, res, next) => {
