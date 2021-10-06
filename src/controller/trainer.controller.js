@@ -59,7 +59,7 @@ const showCoursesInCategory = async (req, res, next) => {
     if (!idCategory.match(/^[0-9a-fA-F]{24}$/))
       return res.send("No courses found");
     const coursesDB = await Course.find({
-      $and: [{ idTrainer: 2 }, { idCategory }],
+      $and: [{ idTrainer: req.id }, { idCategory }],
     })
     for (let course of coursesDB) {
       let category = await Category.findOne({ _id: course.idCategory })
