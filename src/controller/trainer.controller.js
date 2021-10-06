@@ -89,41 +89,13 @@ const showCoursesInCategory = async (req, res, next) => {
   }
 };
 
-const showTrainees = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    if (!id.match(/^[0-9a-fA-F]{24}$/)) return res.send("No courses found");
-    const courseDB = await Course.findOne({ _id: req.params.id })
-    const traineesDB = await User.find({
-      $and: [{ _id: { $in: courseDB.idTrainee } }, { role: "trainee" }],
-    })
-    if (traineesDB.length == 0)
-      return res.send("The course has no students yet");
-    const trainees = traineesDB.map((traineeDB) => {
-      return {
-        name: traineeDB.name,
-        email: traineeDB.email,
-        age: traineeDB.age,
-        phone: traineeDB.phone,
-      };
-    });
-    // Gửi id khóa học để phục vụ việc search
-    const course = {
-      id: courseDB.id,
-      name: courseDB.name,
-    };
-    res.json(trainees);
-  } catch (err) {
-    next(err);
-  }
-};
-
 const searchCourses = async (req, res, next) => {
   try {
     let course;
     let courses;
+    const search = req.query.name.trim();
     const courseDB = await Course.findOne({
-      $and: [{ idTrainer: req.id }, { name: req.query.name }],
+      $and: [{ idTrainer: req.id }, { name: search }],
     })
     const categories = await Category.find({})
     if (courseDB) {
@@ -137,7 +109,7 @@ const searchCourses = async (req, res, next) => {
         quantity: courseDB.idTrainee.length,
       };
     } else {
-      const searchName = new RegExp(req.query.name, "i");
+      const searchName = new RegExp(search, "i");
       const coursesDB = await Course.find({
         $and: [{ idTrainer: req.id }, { name: searchName }],
       })
@@ -163,7 +135,7 @@ const searchCourses = async (req, res, next) => {
       link: `/${req.role}`,
       avatar: req.avatar,
       email: req.email
-    });;
+    });
   } catch (err) {
     next(err);
   }
@@ -173,13 +145,14 @@ const searchCoursesInCategory = async (req, res, next) => {
   try {
     let courses;
     let course;
+    const search = req.query.name.trim();
     const idCategory = req.params.idCategory;
     if (!idCategory.match(/^[0-9a-fA-F]{24}$/))
       return res.send("No courses found");
     const courseDB = await Course.findOne({
       $and: [
         { idTrainer: req.id },
-        { name: req.query.name },
+        { name: search },
         { idCategory: idCategory },
       ],
     })
@@ -195,7 +168,7 @@ const searchCoursesInCategory = async (req, res, next) => {
         quantity: courseDB.idTrainee.length,
       };
     } else {
-      const searchName = new RegExp(req.query.name, "i");
+      const searchName = new RegExp(search, "i");
       const coursesDB = await Course.find({
         $and: [
           { idTrainer: req.id },
@@ -226,7 +199,44 @@ const searchCoursesInCategory = async (req, res, next) => {
       link: `/${req.role}`,
       avatar: req.avatar,
       email: req.email
-    });;
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Show Trainee
+const showTrainees = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) return res.send("No courses found");
+    const courseDB = await Course.findOne({ _id: req.params.id })
+    const traineesDB = await User.find({
+      $and: [{ _id: { $in: courseDB.idTrainee } }, { role: "trainee" }],
+    })
+    if (traineesDB.length == 0)
+      return res.send("The course has no students yet");
+    const trainees = traineesDB.map((traineeDB) => {
+      return {
+        name: traineeDB.name,
+        email: traineeDB.email,
+        age: traineeDB.age,
+        phone: traineeDB.phone,
+      };
+    });
+    // Gửi id khóa học để phục vụ việc search
+    const course = {
+      id: courseDB._id,
+      name: courseDB.name,
+    };
+    res.render('trainer/showTrainees',{
+      course,
+      trainees,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email
+    })
   } catch (err) {
     next(err);
   }
@@ -235,16 +245,17 @@ const searchCoursesInCategory = async (req, res, next) => {
 const searchTrainees = async (req, res, next) => {
   try {
     let trainees;
-    const id = req.params.id;
-    if (!id.match(/^[0-9a-fA-F]{24}$/)) return res.send("No courses found");
-    const Trainees = await Course.findOne({ _id: id })
-    const idTrainees = Trainees.idTrainees;
-    if (!isNaN(req.params.search)) {
+    const idCourse = req.params.id;
+    search = req.query.search.trim();
+    if (!idCourse.match(/^[0-9a-fA-F]{24}$/)) return res.send("No courses found");
+    const courseDB = await Course.findOne({ _id: idCourse })
+    const idTrainees = courseDB.idTrainee;
+    if (!isNaN(req.query.search) && search) {
       const traineeByAgeDB = await User.find({
         $and: [
           { _id: { $in: idTrainees } },
           { role: "trainee" },
-          { age: req.params.search },
+          { age: req.query.search },
         ],
       })
       if (traineeByAgeDB.length > 0) {
@@ -262,7 +273,7 @@ const searchTrainees = async (req, res, next) => {
         $and: [
           { _id: { $in: idTrainees } },
           { role: "trainee" },
-          { name: req.params.search },
+          { name: search },
         ],
       })
       if (traineeByNameDB.length > 0) {
@@ -275,7 +286,7 @@ const searchTrainees = async (req, res, next) => {
           };
         });
       } else {
-        const searchName = new RegExp(req.params.search, "i");
+        const searchName = new RegExp(search, "i");
         const traineeByNameExtendDB = await User.find({
           $and: [
             { _id: { $in: idTrainees } },
@@ -295,7 +306,19 @@ const searchTrainees = async (req, res, next) => {
         }
       }
     }
-    res.json(trainees);
+    const course = {
+      id: courseDB._id,
+      name: courseDB.name,
+    }; 
+
+    res.render('trainer/showTrainees',{
+      course,
+      trainees,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email
+    })
   } catch (err) {
     next(err);
   }
