@@ -30,6 +30,8 @@ router.patch('/viewCourses/:id/restore', staffController.course.restore);
 router.delete('/viewCourses/:id/force', staffController.course.deleteForce);
 router.delete('/viewCourses/:id/deleteTrainee/:idTrainee', staffController.course.deleteTrainee);
 router.delete('/viewCourses/:id/deleteTrainer/:idTrainer', staffController.course.deleteTrainer);
+router.get('/searchAddTrainer/:id', staffController.course.searchAddTrainer);
+router.get('/searchAddTrainee/:id', staffController.course.searchAddTrainee);
 router.get('/viewCourses/:id', staffController.course.showDetail);
 router.get('/viewCourses',staffController.course.show);
 

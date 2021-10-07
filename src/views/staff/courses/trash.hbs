@@ -9,9 +9,11 @@
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
+    {{> header}}
     <div class="container">
         <div class="d-flex justify-content-between">
             <div>
@@ -41,7 +43,7 @@
                     {{/if}}
                     {{/each}}
                     <td>{{this.description}}</td>
-                    <td>{{this.deletedAt}}</td>
+                    <td>{{this.dateDeleted}}</td>
                     <td>
                         <a class="btn-restore" href="" data-id="{{this._id}}">Restore</a>
                         <a href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
@@ -56,6 +58,7 @@
             </tbody>
         </table>
     </div>
+    {{> footer}}
     <!-- Button trigger modal -->
 
     <!-- Modal -->

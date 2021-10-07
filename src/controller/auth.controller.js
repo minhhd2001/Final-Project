@@ -9,12 +9,6 @@ const loginView = (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const userInDB = await User.findOne({ email: req.body.email })
-      .then((user) => {
-        return user;
-      })
-      .catch((err) => {
-        res.send(err);
-      });
     if (
       !userInDB ||
       !bcrypt.compareSync(req.body.password, userInDB.password)
@@ -39,7 +33,7 @@ const login = async (req, res, next) => {
         res.redirect("/staff");
         break;
       case "trainer":
-        res.redirect("/profile");
+        res.redirect("/trainer");
 
         break;
       default:
@@ -48,8 +42,7 @@ const login = async (req, res, next) => {
     }
     next();
   } catch (err) {
-    console.log(`Function : login`);
-    console.log(err);
+    next(err);
   }
 };
 const logout = async (req, res, next) => {

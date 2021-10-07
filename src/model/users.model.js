@@ -6,10 +6,9 @@ const roles = require('./roles.model');
 const rolesModel = roles.model;
 const bcrypt = require('bcryptjs');
 
-//
+
 const salt = bcrypt.genSaltSync(10);
 let passwordHash = bcrypt.hashSync('123456', salt);
-//
 
 const user = new Schema({
     _id: Number,
@@ -39,13 +38,9 @@ function initialize() {
                     console.log(err);
                 }
                 else{
-                    // const salt = bcrypt.genSaltSync(10);
-                    // let passwordHash = bcrypt.hashSync('123456', salt);
-
                     new userModel({
                         name: 'admin',
                         email : 'admin@fpt.edu.vn',
-                        //password : passwordHash,
                         age: 20, 
                         phone : '0373569708',
                         address: 'Hà Nội',
@@ -81,6 +76,30 @@ function initialize() {
                 }
             })
             //
+            //
+            // rolesModel.findOne({name: 'trainer'},(err,result) => {
+            //     if(err && !result){
+            //         console.log(err);
+            //     }
+            //     else{
+            //         const salt = bcrypt.genSaltSync(10);
+            //         let passwordHash = bcrypt.hashSync('123456', salt);
+
+            //         new userModel({
+            //             name: 'trainer',
+            //             email : 'trainerD@fpt.edu.vn',
+            //             password : passwordHash,
+            //             age: 21, 
+            //             phone : '0373569708',
+            //             address: 'Hà Nội 2',
+            //             role : result.name
+            //         }).save((err)=>{
+            //             if(err) console.log(err);
+            //             else console.log('Add trainer user !');
+            //         })
+            //     }
+            // })
+            //
 
         }
     })
@@ -88,7 +107,7 @@ function initialize() {
 
 const Users = {
     model : userModel,
-    initialize: initialize(),
+    initialize: initialize,
 }
 module.exports = Users;
 

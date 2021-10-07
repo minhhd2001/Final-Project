@@ -9,7 +9,9 @@ async function connect() {
         // await mongoose.connect(`mongodb:${process.env.DB_HOST}/${process.env.DB_NAME}`);
         // await mongoose.connect('mongodb://localhost:27017/group5_project_application_development');
         // await mongoose.connect('mongodb://localhost:27017/Web');
-        await mongoose.connect(`mongodb+srv://admin:admin@cluster0.ewlyy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`);
+        // await mongoose.connect(`mongodb+srv://admin:admin@cluster0.ewlyy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`);
+        //await mongoose.connect('mongodb://localhost:27017/group5_project_application_development');
+        //await mongoose.connect('mongodb://localhost:27017/Web');
         console.log('Connected successful !');
         await role.initialize;
         await category.initialize;
