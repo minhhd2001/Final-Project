@@ -10,13 +10,8 @@ const router = express.Router();
 // router.use('/admin', admin);
 router.use('/trainer',authenticate.verifyUser, authenticate.isTrainer, trainer);
 router.use('/staff',authenticate.verifyUser, authenticate.isStaff, staff);
-
-router.get('/upload', (req, res, next) => {
-    res.render('upload')
-})
+router.use('/profile', authenticate.verifyUser,  profile);
 router.use('/', auth);
-// router.use('/:slug', (req, res, next) => {
-//     res.send('Not found page')
-// });
+
 
 module.exports = router;
