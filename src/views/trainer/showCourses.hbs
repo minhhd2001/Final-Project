@@ -66,7 +66,7 @@
                     <th scope="col">Category</th>
                     <th scope="col">Description</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col"></th>
+                    <th scope="col">Option</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,7 +78,7 @@
                     <td>{{this.category}}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.quantity}}</td>
-                    <td><a href="/trainer/showalltrainees/{{this.id}}">Show trainees</a></td>
+                    <td><a class="btn btn-success"href="/trainer/showalltrainees/{{this.id}}">Show trainees</a></td>
                 </tr>
                 {{else}}
                 <tr>

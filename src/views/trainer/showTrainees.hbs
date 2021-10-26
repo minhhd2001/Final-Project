@@ -31,21 +31,23 @@
             </div>
         </div>
         <table class="table table-hover">
-            <thead class="bg-warning">
+            <thead class="bg-warning text-center">
                 <tr>
                     <th scope="col">No.</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Avatar</th>
                     <th scope="col">Age</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class='text-center'>
                 {{#if trainees}}
                 {{#each trainees}}
                 <tr>
                     <th>{{sum @index}}</th>
                     <td>{{this.name}}</td>
+                    <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></td>
                     <td>{{this.age}}</td>
                     <td>{{this.email}}</td>
                     <td>{{this.phone}}</td>
@@ -56,9 +58,10 @@
                 {{/each}}
                 {{else}}
                 {{#if trainee}}
-                <tr>
+                <tr >
                     <th>1</th>
                     <td>{{trainees.name}}</td>
+                    <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></td>
                     <td>{{trainees.age}}</td>
                     <td>{{trainees.email}}</td>
                     <td>{{trainees.phone}}</td>

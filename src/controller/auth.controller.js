@@ -27,14 +27,13 @@ const login = async (req, res, next) => {
     const role = userData.role;
     switch (role) {
       case "admin":
-        res.redirect("/profile");
+        res.redirect("/admin");
         break;
       case "staff":
         res.redirect("/staff");
         break;
       case "trainer":
         res.redirect("/trainer");
-
         break;
       default:
         res.redirect("/profile");

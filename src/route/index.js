@@ -7,10 +7,12 @@ const staff = require('./staff.route');
 const authenticate = require('../middleware/auth.middleware')
 const router = express.Router();
 
-// router.use('/admin', admin);
-router.use('/trainer',authenticate.verifyUser, authenticate.isTrainer, trainer);
-router.use('/staff',authenticate.verifyUser, authenticate.isStaff, staff);
-router.use('/profile', authenticate.verifyUser,  profile);
+router.use('/admin', authenticate.verifyUser, authenticate.isAdmin, admin);
+router.use('/trainer', authenticate.verifyUser, authenticate.isTrainer, trainer);
+router.use('/profile', authenticate.verifyUser, profile);
+router.use('/staff', authenticate.verifyUser, authenticate.isStaff, staff);
+
+
 router.use('/', auth);
 
 
