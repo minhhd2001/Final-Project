@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+     <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    {{> header}}
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div>
+                <a class="me-4" href="/admin/viewTrainer/get-create">Add</a>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead class="bg-warning">
+                <tr>
+                    
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Address</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {{#if trainer}}
+                {{#each trainer}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.age}}</td>
+                    <td>{{this.phone}}</td>
+                    <td>{{this.address}}</td>
+                    <td>
+                        <a href="/admin/viewTrainer/{{this._id}}/edit">Edit</a>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-id="{{this._id}}">Delete</a>   
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="4" class="text-center">You don't have a trainer yet.</td>
+                </tr>
+                {{/each}}
+            {{else}}
+                {{#if trainer}}
+                <tr>
+                    <td>{{trainer.name}}</td>
+                    <td>{{trainer.email}}</td>
+                    <td>{{trainer.age}}</td>
+                    <td>{{trainer.phone}}</td>
+                    <td>{{trainer.address}}</td>
+                    <td>
+                        <a href="/admin/viewTrainer?id={{trainer._id}}/edit">Edit</a>
+                        <a href="">Delete</a>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan='5' class='text-center'>Can't find this trainer</td>
+                </tr>
+                {{/if}}
+            {{/if}}
+            </tbody>
+        </table>
+    </div>
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this student?
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-delete-student" type="button" class="btn btn-danger">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="form-delete" method="post"></form>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let trainerId;
+            let deleteForm = document.querySelector('.form-delete')
+            let btnDeleteTrainer = document.querySelector('#btn-delete-student')
+            let deleteModal = document.getElementById('deleteModal')
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                let button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                trainerId = button.getAttribute('data-id')
+            })
+            btnDeleteTrainer.onclick = () => {
+                deleteForm.action = `/admin/viewTrainer/${trainerId}?_method=DELETE`;
+                deleteForm.submit();
+            }
+        })
+
+    </script>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+           {{> footer}}
+</body>
+
+</html>
