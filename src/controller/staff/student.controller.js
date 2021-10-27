@@ -37,8 +37,8 @@ const store = async (req, res, next) => {
 
 //[GET] /staff/viewStudent
 const show = async (req, res, next) => {
-  let students = await Students.find({ role: "trainee" })
   try {
+    let students = await Students.find({ role: "trainee" })
     res.render("staff/students/viewStudent", {
       students: students,
       rolePage: req.rolePage,
@@ -54,8 +54,8 @@ const show = async (req, res, next) => {
 
 //[GET] /staff/viewStudent/:id/edit
 const edit = (req, res, next) => {
-  let student = Students.findOne({ _id: req.params.id })
   try {
+    let student = Students.findOne({ _id: req.params.id })
     res.render("staff/students/editStudent", {
       student: student,
       rolePage: req.rolePage,
@@ -71,11 +71,11 @@ const edit = (req, res, next) => {
 
 //[PUT] /staff/viewStudent/:id
 const update = async (req, res, next) => {
-  let student = await Students.findOne({ _id: req.params.id })
   try{
     await Students.updateOne({ _id: req.params.id }, req.body)
     return res.redirect('/staff/viewStudent');
   }catch(err){
+    let student = await Students.findOne({ _id: req.params.id })
     res.render("staff/students/editStudent", {
       student: student,
       rolePage: req.rolePage,
@@ -90,51 +90,43 @@ const update = async (req, res, next) => {
 
 //[DELETE] /staff/viewStudent/:id
 const deleteS = async (req, res, next) => {
-  let student = await Students.deleteOne({ _id: req.params.id })
   try {
+    let student = await Students.deleteOne({ _id: req.params.id })
     res.redirect("/staff/viewStudent")
   }
   catch(err) {
-    res.render("/staff/viewStudent", {
-      student: student,
-      rolePage: req.rolePage,
-      link: `/${req.role}`,
-      avatar: req.avatar,
-      email: req.email,
-    });
+    next(err);
   }
 };
 
 //[GET] /staff/viewStudent/search
 const search = async (req, res, next) => {
-  let student = await Students.findOne({
-    $and: [{ name: req.query.search }, { role: "trainee" }],
-  })
-    .then((student) => {
-      return student;
+  try {
+    let student = await Students.findOne({
+      $and: [{ name: req.query.search }, { role: "trainee" }],
     })
-    .catch(next);
-  if (student) {
-    return res.render("staff/students/viewStudent", {
-      student: student,
+    if (student) {
+      return res.render("staff/students/viewStudent", {
+        student: student,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email,
+      });
+    }
+    const searchStudent = new RegExp(req.query.search, "i");
+    let students = await Students.find({ $and: [{ name: searchStudent }, { role: "trainee" }] })
+    res.render("staff/students/viewStudent", {
+      students: students,
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
       email: req.email,
     });
   }
-  const searchStudent = new RegExp(req.query.search, "i");
-  await Students.find({ $and: [{ name: searchStudent }, { role: "trainee" }] })
-    .then((students) => {
-      res.render("staff/students/viewStudent", {
-        students: students,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email,
-      });
-    })
-    .catch(next);
+  catch (err) {
+    next(err);
+  }
 };
 
 const student = {
