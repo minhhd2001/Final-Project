@@ -54,17 +54,19 @@ const show = async (req, res, next) => {
 
 //[GET] /staff/viewStudent/:id/edit
 const edit = (req, res, next) => {
-  Students.findOne({ _id: req.params.id })
-    .then((student) => {
-      res.render("staff/students/editStudent", {
-        student: student,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email,
-      });
-    })
-    .catch(next);
+  let student = Students.findOne({ _id: req.params.id })
+  try {
+    res.render("staff/students/editStudent", {
+      student: student,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  }
+  catch(err){
+    next(err);
+  }
 };
 
 //[PUT] /staff/viewStudent/:id
@@ -89,10 +91,12 @@ const update = async (req, res, next) => {
 //[DELETE] /staff/viewStudent/:id
 const deleteS = async (req, res, next) => {
   Students.deleteOne({ _id: req.params.id })
-    .then(() => {
-      res.redirect("/staff/viewStudent");
-    })
-    .catch(next);
+  try {
+    res.redirect("/staff/viewStudent");
+  }
+  catch(err) {
+    next(err);
+  }
 };
 
 //[GET] /staff/viewStudent/search
