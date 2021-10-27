@@ -16,10 +16,16 @@ const store = async (req, res, next) => {
   try {
     await new Categories({
       name: req.body.name,
-    }).save();
+    }).save()
     res.redirect("/staff/viewCategory");
   } catch (err) {
-    next(err);
+    res.render("staff/categories/createCategory", {
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+      addFailed: true
+    });
   }
 };
 
