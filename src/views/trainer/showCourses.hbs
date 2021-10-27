@@ -24,13 +24,13 @@
         <div class="d-flex justify-content-between">
             <div>
                 {{#if idCategory}}
-                <form method="get" action="/trainer/searchcourses/{{idCategory}}">
-                    <input type="text" name="name">
+                <form method="get" action="/trainer/searchcourses/{{idCategory}}" class="d-flex my-4">
+                    <input type="text" name="name" class="form-control me-2">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
                 {{else}}
-                <form method="get" action="/trainer/searchcourses">
-                    <input type="text" name="name">
+                <form method="get" action="/trainer/searchcourses" class="d-flex my-4">
+                    <input type="text" name="name" class="form-control me-2">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
                 {{/if}}

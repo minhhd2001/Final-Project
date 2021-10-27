@@ -64,7 +64,7 @@ const edit = async (req, res, next) => {
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
-      email: req.email,
+      email: req.email
     });
   } catch (err) {
     next(err);
@@ -77,7 +77,15 @@ const update = async (req, res, next) => {
     await Categories.updateOne({ _id: req.params.id }, req.body)
     res.redirect("/staff/viewCategory")
   } catch (err) {
-    next(err);
+    const category = await Categories.findOne({ _id: req.params.id })
+    res.render("staff/categories/editCategory", {
+      category: category,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+      addFailed: true
+    });
   }
 };
 

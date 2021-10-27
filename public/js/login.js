@@ -24,6 +24,7 @@ let emailError = parentEmail.querySelector('.form-message')
 let inputPassword = $('.form-group input[name="password"]')
 let parentPassword = findParentSelector(inputPassword, '.form-group')
 let passwordError = parentPassword.querySelector('.form-message')
+let loginFailed = document.querySelector('#failedLogin')
 function handleValidation() {
     inputEmail.onblur = () => {
         let check = checkEmpty(inputEmail, parentEmail, emailError, 'invalid', 'Please fill in this field')
@@ -34,6 +35,7 @@ function handleValidation() {
     inputEmail.oninput = () => {
         emailError.innerHTML = ''
         parentEmail.classList.remove('invalid')
+        loginFailed.style.display = 'none'
     }
     inputPassword.onblur = () => {
         let check = checkEmpty(inputPassword, parentPassword, passwordError, 'invalid', 'Please fill in this field')
@@ -44,6 +46,7 @@ function handleValidation() {
     inputPassword.oninput = () => {
         passwordError.innerHTML = ''
         parentPassword.classList.remove('invalid')
+        loginFailed.style.display = 'none'
     }
 }
 handleValidation()

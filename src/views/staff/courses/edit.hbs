@@ -22,6 +22,9 @@
     {{> header}}
     <div class="container">
         <div class="content">
+            {{#if addFailed}}
+                <div class="alert alert-danger mt-4" id="addFailed">Information Invalid</div>
+            {{/if}}
             <form method="post" action="/staff/viewCourses/{{course._id}}?_method=PUT">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name courses</label>
@@ -55,6 +58,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
+         <script>
+        let inputs = document.querySelectorAll('input');
+        let addFailed = document.querySelector("#addFailed");
+            for(input of inputs) {
+                input.onclick = ()=>{
+                addFailed.style.display = "none";
+            }
+            }
+    </script>
 </body>
 
 </html>
