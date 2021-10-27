@@ -1,6 +1,5 @@
 const Students = require("../../model/users.model").model;
 const Roles = require("../../model/roles.model");
-//const Courses = require('../../model/courses.model');
 
 //[GET] /staff/viewStudent/create
 const create = (req, res, next) => {
@@ -38,32 +37,36 @@ const store = async (req, res, next) => {
 
 //[GET] /staff/viewStudent
 const show = async (req, res, next) => {
-  await Students.find({ role: "trainee" })
-    .then((students) => {
-      res.render("staff/students/viewStudent", {
-        students: students,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email,
-      });
-    })
-    .catch(next);
+  let students = await Students.find({ role: "trainee" })
+  try {
+    res.render("staff/students/viewStudent", {
+      students: students,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  }
+  catch(err) {
+    next(err);
+  }
 };
 
 //[GET] /staff/viewStudent/:id/edit
 const edit = (req, res, next) => {
-  Students.findOne({ _id: req.params.id })
-    .then((student) => {
-      res.render("staff/students/editStudent", {
-        student: student,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email,
-      });
-    })
-    .catch(next);
+  let student = Students.findOne({ _id: req.params.id })
+  try {
+    res.render("staff/students/editStudent", {
+      student: student,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  }
+  catch(err){
+    next(err);
+  }
 };
 
 //[PUT] /staff/viewStudent/:id
@@ -87,24 +90,17 @@ const update = async (req, res, next) => {
 
 //[DELETE] /staff/viewStudent/:id
 const deleteS = async (req, res, next) => {
-  // let courses = await Courses.find({idStudent: req.params.id})
-  //     .then(courses => {
-  //         return users
-  //     })
-  //     .catch(next)
-  // if(courses.length) {
-  //     return res.send('A course already exists in this student. Please delete the course first')
-  // }
   Students.deleteOne({ _id: req.params.id })
-    .then(() => {
-      res.redirect("/staff/viewStudent");
-    })
-    .catch(next);
+  try {
+    res.redirect("/staff/viewStudent");
+  }
+  catch(err) {
+    next(err);
+  }
 };
 
 //[GET] /staff/viewStudent/search
 const search = async (req, res, next) => {
-  //console.log(req.query.search);
   const student = await Students.findOne({
     $and: [{ name: req.query.search }, { role: "trainee" }],
   })
@@ -112,7 +108,6 @@ const search = async (req, res, next) => {
       return student;
     })
     .catch(next);
-  //console.log(user);
   if (student) {
     return res.render("staff/students/viewStudent", {
       student: student,
