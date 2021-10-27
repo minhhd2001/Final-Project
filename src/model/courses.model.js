@@ -14,6 +14,14 @@ const course = new Schema({
     timestamps : { currentTime: () => Math.floor(Date.now() / 1000) },
 });
 
+
+
+
+
+
+
+
+
 course.plugin(mongooseDelete, { overrideMethods: 'all', deletedAt: true});
 
 module.exports = mongoose.model('courses', course);

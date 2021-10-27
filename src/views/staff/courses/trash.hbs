@@ -17,7 +17,7 @@
     <div class="container">
         <div class="d-flex justify-content-between">
             <div>
-                <a class="me-4" href="/staff/viewCourses">Course List</a>
+                <a class="mt-4 me-4 btn btn-success" href="/staff/viewCourses">Course List</a>
                 <h1>List of deleted courses</h1>
             </div>
         </div>
@@ -45,8 +45,8 @@
                     <td>{{this.description}}</td>
                     <td>{{this.dateDeleted}}</td>
                     <td>
-                        <a class="btn-restore" href="" data-id="{{this._id}}">Restore</a>
-                        <a href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        <a class="btn btn-primary btn-restore" href="" data-id="{{this._id}}">Restore</a>
+                        <a class="btn btn-danger" href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
                             data-id="{{this._id}}">Permanently delete</a>
                     </td>
                 </tr>
