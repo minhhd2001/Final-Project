@@ -35,8 +35,14 @@ router.get('/searchAddTrainee/:id', staffController.course.searchAddTrainee);
 router.get('/viewCourses/:id', staffController.course.showDetail);
 router.get('/viewCourses',staffController.course.show);
 
-
-
+// Router STUDENT
+router.get('/viewStudent/create', staffController.student.create);
+router.post('/viewStudent/store', staffController.student.store);
+router.get('/viewStudent/:id/edit', staffController.student.edit);
+router.put('/viewStudent/:id', staffController.student.update);
+router.delete('/viewStudent/:id', staffController.student.deleteS);
+router.get('/viewStudent/search', staffController.student.search);
+router.get('/viewStudent', staffController.student.show);
 
 //Router STAFF
 router.get('/',staffController.index);

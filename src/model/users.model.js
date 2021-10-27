@@ -6,6 +6,7 @@ const roles = require('./roles.model');
 const rolesModel = roles.model;
 const bcrypt = require('bcryptjs');
 
+
 const salt = bcrypt.genSaltSync(10);
 let passwordHash = bcrypt.hashSync('123456', salt);
 
@@ -50,6 +51,56 @@ function initialize() {
                     })
                 }
             })
+
+            //
+            rolesModel.findOne({name: 'staff'},(err,result) => {
+                if(err && !result){
+                    console.log(err);
+                }
+                else{
+                    const salt = bcrypt.genSaltSync(10);
+                    let passwordHash = bcrypt.hashSync('123456', salt);
+
+                    new userModel({
+                        name: 'staff',
+                        email : 'staff@fpt.edu.vn',
+                        password : passwordHash,
+                        age: 20, 
+                        phone : '0373569708',
+                        address: 'Hà Nội',
+                        role : result.name
+                    }).save((err)=>{
+                        if(err) console.log(err);
+                        else console.log('Add staff user !');
+                    })
+                }
+            })
+            //
+            //
+            // rolesModel.findOne({name: 'trainer'},(err,result) => {
+            //     if(err && !result){
+            //         console.log(err);
+            //     }
+            //     else{
+            //         const salt = bcrypt.genSaltSync(10);
+            //         let passwordHash = bcrypt.hashSync('123456', salt);
+
+            //         new userModel({
+            //             name: 'trainer',
+            //             email : 'trainerD@fpt.edu.vn',
+            //             password : passwordHash,
+            //             age: 21, 
+            //             phone : '0373569708',
+            //             address: 'Hà Nội 2',
+            //             role : result.name
+            //         }).save((err)=>{
+            //             if(err) console.log(err);
+            //             else console.log('Add trainer user !');
+            //         })
+            //     }
+            // })
+            //
+
         }
     })
 }

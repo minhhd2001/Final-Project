@@ -17,13 +17,13 @@ const checkLogout = (req, res, next) => {
     else{
         switch(user.role){
             case 'admin':
-                res.redirect('/profile')
+                res.redirect('/admin')
             break;
             case 'staff':
                 res.redirect('/staff');
             break;
             case 'trainer':
-                res.redirect('/profile')
+                res.redirect('/trainer')
             break;
             default :
                 res.redirect('/profile')
