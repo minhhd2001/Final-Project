@@ -37,17 +37,19 @@ const store = async (req, res, next) => {
 
 //[GET] /staff/viewStudent
 const show = async (req, res, next) => {
-  await Students.find({ role: "trainee" })
-    .then((students) => {
-      res.render("staff/students/viewStudent", {
-        students: students,
-        rolePage: req.rolePage,
-        link: `/${req.role}`,
-        avatar: req.avatar,
-        email: req.email,
-      });
-    })
-    .catch(next);
+  let students = await Students.find({ role: "trainee" })
+  try {
+    res.render("staff/students/viewStudent", {
+      students: students,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  }
+  catch(err) {
+    next(err);
+  }
 };
 
 //[GET] /staff/viewStudent/:id/edit
