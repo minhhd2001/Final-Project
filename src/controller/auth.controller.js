@@ -13,7 +13,9 @@ const login = async (req, res, next) => {
       !userInDB ||
       !bcrypt.compareSync(req.body.password, userInDB.password)
     ) {
-      return res.send("Tài khoản hoặc mật khẩu sai");
+      return res.render('login/index',{
+        failedLogin: true,
+      })
     }
     const userData = {
       id: userInDB.id,

@@ -31,14 +31,26 @@ const changePassword = async (req, res, next) => {
     const user = await User.findOne({ _id: req.id })
     if (!user) return res.send(401);
     if (!bcrypt.compareSync(req.body.password, user.password))
-      return res.send("Password wrong !");
+      return res.render('profile/viewChangePassword', {
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email,
+        passwordError: true,
+      })
     if (newPasswordLength >= 6 && req.body.password != req.body.newPassword) {
       const salt = bcrypt.genSaltSync(10);
       let passwordHash = bcrypt.hashSync(req.body.newPassword, salt);
       await User.updateOne({ _id: req.id }, { password: passwordHash })
       res.redirect("/logout")
     } else {
-      res.send("New password invalid");
+      return res.render('profile/viewChangePassword', {
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email,
+        newPasswordError: true,
+      })
     }
   } catch (err) {
     next(err);
