@@ -16,6 +16,9 @@
     {{> header}}
     <div class="container mb-5">
         <h1 class="text-center">{{course.name}} course</h1>
+        <div class="my-3">
+            <a class="text-decoration-none" href="/staff/viewCourses" style="font-size: 20px">VIEW COURSE PAGE</a>
+        </div>
         <div class="top">
             <div class="row">
                 <div class="col">
@@ -25,7 +28,7 @@
                     <p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span>Name Trainer: <span class="trainer-name">{{course.nameTrainer}}</span></span>
-                        <button class="btn btn-dark btn-close-trainer" data-bs-toggle="modal"
+                        <button class="btn btn-danger btn-close-trainer" data-bs-toggle="modal"
                             data-bs-target="#deleteModalTrainer" data-id="{{course._id}}"
                             data-idTrainer="{{course.idTrainer}}" style="margin-right: 130px;">Delete trainer</button>
                     </div>
@@ -55,7 +58,7 @@
                                 <td>{{this.name}}</td>
                                 <td>{{this.email}}</td>
                                 <td>
-                                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                         data-id="{{../course._id}}" data-idTrainee="{{this._id}}">Delete</button>
                                 </td>
                             </tr>

@@ -234,6 +234,12 @@ const viewAddTrainee = async (req, res, next) => {
         const trainees = await Users.find({ role: "trainee" })
         const course = await Courses.findOne({ _id: req.params.id })
         const traineesOutCourse = [];
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 3;
+        let countPage;
+        let arrayCountPage = [];
+        let start = (page - 1) * perPage;
+        let end = page * perPage;
         for (let trainee of trainees) {
             let courseIdTrainee = course.idTrainee.some((idTrainee) => {
                 return idTrainee == trainee._id;
@@ -242,9 +248,17 @@ const viewAddTrainee = async (req, res, next) => {
                 traineesOutCourse.push(trainee);
             }
         }
+        countPage = Math.ceil(traineesOutCourse.length / perPage);
+        for(let i = 1; i <= countPage; i++) {
+            arrayCountPage.push(i);
+        }
+        let pageIndex = page - 1;
         res.render("staff/courses/addTrainee", {
             course,
-            trainees: traineesOutCourse,
+            countPage,
+            pageIndex,
+            arrayCountPage,
+            trainees: traineesOutCourse.slice(start, end),
             rolePage: req.rolePage,
             link: `/${req.role}`,
             avatar: req.avatar,
@@ -327,7 +341,13 @@ const searchAddTrainer = async (req, res, next) => {
 }
 const searchAddTrainee = async (req, res, next) => {
     try {
-        const nameSearch = req.query.name.trim();
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 3;
+        let countPage;
+        let arrayCountPage = [];
+        let start = (page - 1) * perPage;
+        let end = page * perPage;
+        let nameSearch = req.query.name.trim();
         let trainees = await Users.find({ $and: [{ role: 'trainee' }, { name: nameSearch }] })
         const course = await Courses.findOne({ _id: req.params.id })
         if (trainees.length == 0) {
@@ -343,9 +363,18 @@ const searchAddTrainee = async (req, res, next) => {
                 traineesOutCourse.push(trainee);
             }
         }
+        countPage = Math.ceil(traineesOutCourse.length / perPage);
+        for(let i = 1; i <= countPage; i++) {
+            arrayCountPage.push(i);
+        }
+        let pageIndex = page - 1;
         res.render("staff/courses/addTrainee", {
-            trainees: traineesOutCourse,
             course,
+            countPage,
+            pageIndex,
+            arrayCountPage,
+            nameSearch,
+            trainees: traineesOutCourse.slice(start, end),
             rolePage: req.rolePage,
             link: `/${req.role}`,
             avatar: req.avatar,

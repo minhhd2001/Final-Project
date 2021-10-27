@@ -16,14 +16,17 @@
     {{> header}}
     <div class="container">
         <h1 class="text-center">{{course.name}} course</h1>
+        <div class="my-3">
+            <a class="text-decoration-none" href="/staff/viewCourses/{{course._id}}" style="font-size: 20px">COURSE DETAIL PAGE</a>
+        </div>
         <div class="bottom">
             <div class="row">
                 <div class="col bottom-left">
-                    <form class="d-flex" method="get" action = '/staff/searchAddTrainer/{{course._id}}'>
-                        <input class="form-control me-2" name = "name" type="search" placeholder="Search" aria-label="Search">
+                    <form class="d-flex input-group" method="get" action = '/staff/searchAddTrainer/{{course._id}}'>
+                        <input class="form-control" name = "name" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <form method = "POST" action="/staff/viewCourses/{{course._id}}/addTrainer">
+                    <form class="mt-5" method = "POST" action="/staff/viewCourses/{{course._id}}/addTrainer">
                         <button class="btn btn-primary">Add Trainer</button>
                         <table class="table">
                             <thead>

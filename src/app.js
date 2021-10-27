@@ -25,6 +25,12 @@ hbs.registerHelper("compare",(a, b) => {
     }
     return false;
 })
+hbs.registerHelper("comparePoorMore",(a, b) => {
+    if(String(a) < String(b)){
+        return true;
+    }
+    return false;
+})
 app.use(session({
     resave: true,
     saveUninitialized: false,
@@ -35,7 +41,9 @@ const run = async ()=>{
     await db.connect();
     app.use('/', route)
 }
-
 run();
-
 app.listen(3000, ()=> console.log('Server is running !'));
+
+
+
+

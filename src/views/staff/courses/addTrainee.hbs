@@ -16,14 +16,17 @@
     {{> header}}
     <div class="container">
         <h1 class="text-center">{{course.name}} course</h1>
+        <div class="my-3">
+            <a class="text-decoration-none" href="/staff/viewCourses/{{course._id}}" style="font-size: 20px">COURSE DETAIL PAGE</a>
+        </div>
         <div class="bottom">
             <div class="row">
                 <div class="col bottom-right">
-                    <form class="d-flex" method="get" action="/staff/searchAddTrainee/{{course._id}}">
-                        <input class="form-control me-2" name="name" type="search" placeholder="Search" aria-label="Search">
+                    <form class="d-flex input-group" method="get" action="/staff/searchAddTrainee/{{course._id}}">
+                        <input class="form-control" name="name" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <form method = "POST" action="/staff/viewCourses/{{course._id}}/addTrainee">
+                    <form class="mt-5" method="POST" action="/staff/viewCourses/{{course._id}}/addTrainee">
                         <button class="btn btn-primary">Add Trainee</button>
                         <table class="table">
                             <thead>
@@ -36,13 +39,14 @@
                             </thead>
                             <tbody>
                                 {{#each trainees}}
-                                        <tr>
-                                        <td><input value="{{this._id}}" class="form-check-input" name="traineeIds[]" type="checkbox">
-                                        </td>
-                                        <td>{{this._id}}</td>
-                                        <td>{{this.name}}</td>
-                                        <td>{{this.email}}</td>
-                                    </tr>
+                                <tr>
+                                    <td><input value="{{this._id}}" class="form-check-input" name="traineeIds[]"
+                                            type="checkbox">
+                                    </td>
+                                    <td>{{this._id}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.email}}</td>
+                                </tr>
                                 {{else}}
                                 <tr>
                                     <td class="text-center" colspan="5">
@@ -53,6 +57,56 @@
                             </tbody>
                         </table>
                     </form>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item">
+                                <a style="cursor: pointer;" class="page-link page-prev" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {{#if nameSearch}}
+                                {{#each arrayCountPage}}
+                                    {{#if (compare ../pageIndex @index)}}
+                                    <li class="page-item page-number active"><a class="page-link page-"
+                                            href="/staff/searchAddTrainee/{{../course._id}}?name={{../nameSearch}}&page={{this}}">{{this}}</a>
+                                    </li>
+                                    {{else}}
+                                    <li class="page-item page-number"><a class="page-link page-linkActive"
+                                            href="/staff/searchAddTrainee/{{../course._id}}?name={{../nameSearch}}&page={{this}}">{{this}}</a>
+                                    </li>
+                                    {{/if}}
+                                {{/each}}
+                            {{else}}
+                                {{#each arrayCountPage}}
+                                    {{#if (compare ../pageIndex @index)}}
+                                        <li class="page-item page-number active"><a class="page-link page-"
+                                                href="/staff/viewCourses/{{../course._id}}/viewAddTrainee?page={{this}}">{{this}}</a>
+                                        </li>
+                                    {{else}}
+                                        {{#if (comparePoorMore @index 3)}}
+                                            <li class="page-item page-number"><a class="page-link page-linkActive"
+                                                    href="/staff/viewCourses/{{../course._id}}/viewAddTrainee?page={{this}}">{{this}}</a>
+                                            </li>
+                                        {{else}}
+                                            <li class="page-item page-number page-hidden"><a class="page-link page-linkActive"
+                                                    href="/staff/viewCourses/{{../course._id}}/viewAddTrainee?page={{this}}"></a>
+                                            </li>
+                                        {{/if}}                                   
+                                    {{/if}}
+                                {{/each}}
+                            {{/if}}
+                            {{#if (comparePoorMore 3 arrayCountPage.length)}}
+                                 <li class="page-item disabled page-etc"><a class="page-link"
+                                                href="#">...</a>
+                                </li>
+                            {{/if}}
+                            <li class="page-item">
+                                <a style="cursor: pointer;" class="page-link page-next" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -62,6 +116,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
+    <script>
+        let prevPage = document.querySelector('.page-prev');
+        let nextPage = document.querySelector('.page-next');
+        let [...pageNumber] = document.querySelectorAll('.page-number')
+        let pageActive = document.querySelectorAll('.page-number.active');
+        let [...pageHidden] = document.querySelectorAll('.page-hidden');
+        let pageEtc = document.querySelector('.page-etc');
+        if (pageNumber[0].className.includes('active')) {
+            prevPage.style.display = 'none';
+        }
+        if (pageNumber[pageNumber.length - 1].className.includes('active')) {
+            nextPage.style.display = 'none';
+        }
+        prevPage.onclick = () => {
+            for (let i = 0; i < pageNumber.length; i++) {
+                if (pageNumber[i].className.includes('active')) {
+                    pageNumber[i - 1].querySelector('.page-linkActive').click();
+                }
+            }
+        }
+        nextPage.onclick = () => {
+            for (let i = 0; i < pageNumber.length; i++) {
+                if (pageNumber[i].className.includes('active')) {
+                    pageNumber[i + 1].querySelector('.page-linkActive').click();
+                }
+            }
+        }
+        pageHidden.forEach((page) => {
+            if(!page.className.includes('active')){
+                page.style.display = 'none';
+            }
+        })
+        let pageEnd = pageNumber[pageNumber.length - 1];
+        if(pageEnd.className.includes('active')){
+            pageEtc.style.display = 'none';
+        }
+    </script>
 </body>
 
 </html>

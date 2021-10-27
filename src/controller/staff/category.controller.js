@@ -28,12 +28,12 @@ const show = async (req, res, next) => {
   try {
     const categories = await Categories.find({})
     let dateNow;
-    for(let category of categories) {
+    for (let category of categories) {
       let date = new Date(category.createdAt * 1000);
-      if(date.getSeconds() < 10){
-         dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
-      }else{
-         dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      if (date.getSeconds() < 10) {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+      } else {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       }
       category.dateCreated = dateNow;
     }
@@ -84,23 +84,23 @@ const search = async (req, res, next) => {
     if (category) {
       let date = new Date(category.createdAt * 1000);
       if (date.getSeconds() < 10) {
-          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
       } else {
-          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       }
       category.dateCreated = dateNow;
-    }else{
+    } else {
       const searchCategory = new RegExp(req.query.search.trim(), "i");
-      categories = await Categories.find({ name: searchCategory })  
+      categories = await Categories.find({ name: searchCategory })
       for (let category of categories) {
         let date = new Date(category.createdAt * 1000);
         if (date.getSeconds() < 10) {
-            dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
         } else {
-            dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
         }
-        category.dateCreated = dateNow;              
-    }   
+        category.dateCreated = dateNow;
+      }
     }
     res.render("staff/categories/viewCategory", {
       category: category,
@@ -119,10 +119,30 @@ const search = async (req, res, next) => {
 const destroy = async (req, res, next) => {
   try {
     let courses = await Courses.find({ idCategory: req.params.id })
+    let messageError = 'A course already exists in this category. Please delete the course first';
     if (courses.length) {
-      return res.send(
-        "A course already exists in this category. Please delete the course first"
-      );
+      // return res.send(
+      //   "A course already exists in this category. Please delete the course first"
+      // );
+      const categories = await Categories.find({})
+      let dateNow;
+      for (let category of categories) {
+        let date = new Date(category.createdAt * 1000);
+        if (date.getSeconds() < 10) {
+          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+        } else {
+          dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        }
+        category.dateCreated = dateNow;
+      }
+      return res.render("staff/categories/viewCategory", {
+        messageError,
+        categories: categories,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email,
+      });
     }
     await Categories.deleteOne({ _id: req.params.id })
     res.redirect("/staff/viewCategory");
