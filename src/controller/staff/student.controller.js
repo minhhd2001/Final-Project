@@ -90,18 +90,24 @@ const update = async (req, res, next) => {
 
 //[DELETE] /staff/viewStudent/:id
 const deleteS = async (req, res, next) => {
-  Students.deleteOne({ _id: req.params.id })
+  let student = await Students.deleteOne({ _id: req.params.id })
   try {
-    res.redirect("/staff/viewStudent");
+    res.redirect("/staff/viewStudent")
   }
   catch(err) {
-    next(err);
+    res.render("/staff/viewStudent", {
+      student: student,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
   }
 };
 
 //[GET] /staff/viewStudent/search
 const search = async (req, res, next) => {
-  const student = await Students.findOne({
+  let student = await Students.findOne({
     $and: [{ name: req.query.search }, { role: "trainee" }],
   })
     .then((student) => {
