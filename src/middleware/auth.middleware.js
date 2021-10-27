@@ -36,28 +36,28 @@ const isAdmin = (req, res, next) => {
     const role = req.role;
     if(role === 'admin') {
         next();
-    } else return res.send(401);
+    } else return res.redirect('/');
 }
 
 const isStaff = (req, res, next) => {
     const role = req.role;
     if(role === 'staff') {
         next();
-    } else return res.send(401);
+    } else return res.redirect('/');
 }
 
 const isTrainer = (req, res, next) => {
     const role = req.role;
     if(role === 'trainer') {
         next();
-    } else return res.send(401);
+    } else return res.redirect('/');
 }
 
 const isTrainee = (req, res, next) => {
     const role = req.role;
     if(role === 'trainee') {
         next();
-    } else return res.send(401);
+    } else return res.redirect('/');
 }
 
 const authenticate = {

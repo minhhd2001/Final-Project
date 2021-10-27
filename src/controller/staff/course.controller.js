@@ -51,14 +51,18 @@ const create = async (req, res, next) => {
 //[POST] /staff/viewCourse/store
 const store = async (req, res, next) => {
     try {
-        if (req.body.name && req.body.idCategory) {
             await new Courses(req.body).save();
             res.redirect("/staff/viewCourses");
-        } else {
-            res.send("Enter information wrong")
-        }
     } catch (err) {
-        next(err);
+        const categories = await Categories.find({});
+        return res.render("staff/courses/create", {
+            categories: categories,
+            rolePage: req.rolePage,
+            link: `/${req.role}`,
+            avatar: req.avatar,
+            email: req.email,
+            addFailed: true
+        });
     }
 };
 
@@ -85,7 +89,17 @@ const update = async (req, res, next) => {
         await Courses.updateOne({ _id: req.params.id }, req.body);
         res.redirect("/staff/viewCourses");
     } catch (err) {
-        next(err);
+        const categories = await Categories.find({});
+        const course = await Courses.findOne({ _id: req.params.id });
+        return res.render("staff/courses/edit", {
+            categories: categories,
+            course: course,
+            rolePage: req.rolePage,
+            link: `/${req.role}`,
+            avatar: req.avatar,
+            email: req.email,
+            addFailed: true
+        });
     }
 };
 
