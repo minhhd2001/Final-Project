@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .active {
+            background-color: black !important;
+        }
+    </style>
+</head>
+
+<body>
+    {{> header}}
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            {{!-- <div>
+                {{#if idCategory}}
+                <form method="get" action="/trainee/searchcourses/{{idCategory}}" class="d-flex my-4">
+                    <input type="text" name="name" class="form-control me-2">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+                {{else}}
+                <form method="get" action="/trainee/searchcourses" class="d-flex my-4">
+                    <input type="text" name="name" class="form-control me-2">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+                {{/if}}
+            </div> --}}
+        </div>
+        {{!-- <div class="div">
+            {{#if idCategory}}
+            <button class="btn btn-secondary"><a href="/trainee"
+                    style="color: white;text-decoration: none;">All</a></button>
+            {{#each categories }}
+                {{#if (compare this._id ../idCategory)}}
+            <button class="btn btn-secondary active"><a href="/trainee/{{this._id}}"
+                    style="color: white;text-decoration: none;">{{this.name}}</a></button>
+                {{else}}
+             <button class="btn btn-secondary"><a href="/trainee/{{this._id}}"
+                    style="color: white;text-decoration: none;">{{this.name}}</a></button>
+                {{/if}}
+            {{/each}}
+            {{else}}
+            <button class="btn btn-secondary active"><a href="/trainee"
+                    style="color: white;text-decoration: none;">All</a></button>
+            {{#each categories }}
+            <button class="btn btn-secondary "><a href="/trainee/{{this._id}}"
+                    style="color: white;text-decoration: none;">{{this.name}}</a></button>
+            {{/each}}
+            {{/if}}
+        </div> --}}
+        <table class="table table-hover">
+            <thead class="bg-warning">
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if courses}}
+                {{#each courses}}
+                <tr>
+                    <th>{{sum @index}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.quantity}}</td>
+                    <td><a class="btn btn-success"href="/trainee/showalltrainees/{{this.id}}">Show trainees</a></td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="6" class="text-center">You don't have a course yet.</td>
+                </tr>
+                {{/each}}
+                {{else}}
+                {{#if course}}
+                <tr>
+                    <th>1</th>
+                    <td>{{course.name}}</td>
+                    <td>{{course.category}}</td>
+                    <td>{{course.description}}</td>
+                    <td>{{course.quantity}}</td>
+                    <td><a href="/trainee/showalltrainees/{{course.id}}">Show trainees</a></td>
+                </tr>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan='6' class='text-center'>Can't find this course</td>
+                </tr>
+                {{/if}}
+                {{/if}}
+            </tbody>
+        </table>
+    </div>
+    {{!-- {{> footer}} --}}
+    <!-- Button trigger modal -->
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
