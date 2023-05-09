@@ -5,161 +5,157 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
+    <title>Schedules</title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sideBar.css">
 </head>
 
 <body>
     {{> header}}
-    <div class="container mb-5">
-        <h1 class="text-center">{{course.name}} course</h1>
-        <div class="my-3">
-            <a class="text-decoration-none" href="/staff/viewCourses" style="font-size: 20px">VIEW COURSE PAGE</a>
-        </div>
-        <div class="top">
-            <div class="row">
-                <div class="col">
-                    <p><span>Name Course: </span>{{course.name}}</p>
-                    <p><span>Description Course: </span>{{course.description}}</p>
-                    <p><span>Name Category: </span>{{course.nameCategory}}</p>
-                    <p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Name Trainer: <span class="trainer-name">{{course.nameTrainer}}</span></span>
-                        <button class="btn btn-danger btn-close-trainer" data-bs-toggle="modal"
-                            data-bs-target="#deleteModalTrainer" data-id="{{course._id}}"
-                            data-idTrainer="{{course.idTrainer}}" style="margin-right: 130px;">Delete trainer</button>
+    <div class="wrapper">
+        {{> sidebarStaff}}
+        <div class="main_content">
+            <div class="container mb-5">
+                <h1 class="text-center">Schedule {{schedule.time}}</h1>
+                <div class="my-3">
+                    <a class="text-decoration-none" href="/staff/viewSchedule" style="font-size: 20px">VIEW SCHEDULE
+                        PAGE</a>
+                </div>
+                <div class="top">
+                    <div class="row">
+                        <div class="col">
+                            <p><span>Date: </span>{{schedule.time}}</p>
+                            <p><span>Slot: </span>{{schedule.slot}}</p>
+                            <p><span>Course: </span>{{schedule.nameCourse}}</p>
+                            <p><span>Trainer: </span>{{schedule.nameTrainer}}</p>
+                            <p>Attendance of trainees in the schedule: </p>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No .</th>
+                                        <th scope="col">Avatar</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col" class='text-center'>Attendance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each schedule.trainees}}
+                                    <tr>
+                                        <th scope="row">{{sum @index}}</th>
+                                        <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100"
+                                                height="120"></td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.email}}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-around align-items-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input radio-present" type="radio"
+                                                        name="radio_{{this._id}}" id="{{this._id}}"
+                                                        data_id="{{this._id}}" {{#if (isTrue
+                                                        this.attendance)}}checked{{/if}}>
+                                                    <label class="form-check-label" for="present_{{this._id}}">
+                                                        Present
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input radio-absent" type="radio"
+                                                        name="radio_{{this._id}}" id="{{this._id}}"
+                                                        data_id="{{this._id}}" {{#if (isFalse
+                                                        this.attendance)}}checked{{/if}}>
+                                                    <label class="form-check-label" for="absent_{{this._id}}">
+                                                        Absent
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input radio-notYet" type="radio"
+                                                        name="radio_{{this._id}}" id="{{this._id}}"
+                                                        data_id="{{this._id}}" {{#if (isNull
+                                                        this.attendance)}}checked{{/if}} disabled>
+                                                    <label class="form-check-label" for="absent_{{this._id}}">
+                                                        Not Yet
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{else}}
+                                    <tr>
+                                        <td colspan="5" class="text-center">This schedule has no trainees yet</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                            <button class="btn btn-primary" id="save" disabled>Save</button>
+                        </div>
                     </div>
-                    <a href="/staff/viewCourses/{{course._id}}/viewAddTrainer"
-                        class="btn btn-success btn-addTrainer">Add
-                        Trainer</a>
-                    </p>
-                    <p>
-                    <p>List of trainees in the course: </p>
-                    <a href="/staff/viewCourses/{{course._id}}/viewAddTrainee" class="btn btn-success">Add Trainee</a>
-                    </p>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">No .</th>
-                                <th scope="col">Avatar</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each course.objTrainee}}
-                            <tr>
-                                <th scope="row">{{sum @index}}</th>
-                                <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></td>
-                                <td>{{this.name}}</td>
-                                <td>{{this.email}}</td>
-                                <td>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        data-id="{{../course._id}}" data-idTrainee="{{this._id}}">Delete</button>
-                                </td>
-                            </tr>
-                            {{else}}
-                            <tr>
-                                <td colspan="5" class="text-center">This course has no trainees yet</td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
+
     {{> footer }}
 
-    <!-- Modal -->
-    <div class="modal fade" id="deleteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Trainee</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this trainee?
-                </div>
-                <div class="modal-footer">
-                    <button id="btn-delete-trainee" type="button" class="btn btn-danger">Confirm</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="deleteModalTrainer">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Trainer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this trainer?
-                </div>
-                <div class="modal-footer">
-                    <button id="btn-delete-trainer" type="button" class="btn btn-danger">Confirm</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <form class="form-delete" method="post"></form>
-    <form class="form-delete-trainer" method="post"></form>
+    <form class="form-delete" method="post" action="/staff/viewSchedule/{{schedule._id}}/attendance?_method=PUT"
+        id="form"></form>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            let courseId;
-            let traineeId;
-            let trainerId;
+            let presents = [];
+            let absents = [];
 
-            let deleteForm = document.querySelector('.form-delete')
-            let btnDeleteTrainee = document.querySelector('#btn-delete-trainee')
-            let deleteModal = document.getElementById('deleteModal')
+            const radioPresents = document.querySelectorAll('.radio-present');
+            const radioAbsents = document.querySelectorAll('.radio-absent');
+            const save = document.getElementById('save')
+            const form = document.getElementById('form')
 
-            let deleteFormTrainer = document.querySelector('.form-delete-trainer')
-            let btnDeleteTrainer = document.querySelector('#btn-delete-trainer')
-            let deleteModalTrainer = document.getElementById('deleteModalTrainer')
-            let btnTrainer = document.querySelector('.btn-addTrainer')
-            let nameTrainer = document.querySelector('.trainer-name')
-            let btnCloseTrainer = document.querySelector('.btn-close-trainer')
-            if (nameTrainer.innerHTML) {
-                btnTrainer.style.display = 'none';
-                btnCloseTrainer.style.display = 'inline-block';
-            } else {
-                btnTrainer.style.display = 'inline-block';
-                btnCloseTrainer.style.display = 'none';
+            for (let radioPresent of radioPresents) {
+                if (radioPresent.checked) {
+                    presents.push(radioPresent.getAttribute('data_id'))
+                }
+
+                radioPresent.onclick = (event) => {
+                    let radio = event.target
+                    if (presents.includes(radio.getAttribute('data_id'))) return;
+                    presents.push(radio.getAttribute('data_id'))
+                    absents = absents.filter(absent => absent !== radio.getAttribute('data_id'))
+                    save.disabled = false;
+                }
             }
-            deleteModal.addEventListener('show.bs.modal', function (event) {
-                // Button that triggered the modal
-                let button = event.relatedTarget
-                // Extract info from data-bs-* attributes
-                courseId = button.getAttribute('data-id')
-                traineeId = button.getAttribute('data-idTrainee')
-            })
-            btnDeleteTrainee.onclick = () => {
-                deleteForm.action = `/staff/viewCourses/${courseId}/deleteTrainee/${traineeId}?_method=DELETE`;
-                deleteForm.submit();
+
+            for (let radioAbsent of radioAbsents) {
+                if (radioAbsent.checked) {
+                    absents.push(radioAbsent.getAttribute('data_id'))
+                }
+
+                radioAbsent.onclick = (event) => {
+                    let radio = event.target
+                    if (absents.includes(radio.getAttribute('data_id'))) return;
+                    absents.push(radio.getAttribute('data_id'))
+                    presents = presents.filter(present => present !== radio.getAttribute('data_id'))
+                    save.disabled = false;
+                }
             }
-            deleteModalTrainer.addEventListener('show.bs.modal', function (event) {
-                // Button that triggered the modal
-                let button = event.relatedTarget
-                // Extract info from data-bs-* attributes
-                courseId = button.getAttribute('data-id')
-                trainerId = button.getAttribute('data-idTrainer')
-            })
-            btnDeleteTrainer.onclick = () => {
-                deleteFormTrainer.action = `/staff/viewCourses/${courseId}/deleteTrainer/${trainerId}?_method=DELETE`;
-                deleteFormTrainer.submit();
+
+            save.onclick = () => {
+                const presentsField = document.createElement('input');
+                presentsField.type = 'hidden';
+                presentsField.name = 'presents';
+                presentsField.value = presents;
+                form.append(presentsField);
+
+                const absentsField = document.createElement('input');
+                absentsField.type = 'hidden';
+                absentsField.name = 'absents';
+                absentsField.value = absents;
+                form.append(absentsField);
+
+                form.submit()
             }
-        })
+        });
     </script>
 
     <!-- JavaScript Bundle with Popper -->

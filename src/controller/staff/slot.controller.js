@@ -1,9 +1,8 @@
-const Students = require("../../model/users.model").model;
-const Roles = require("../../model/roles.model");
+const Slots = require("../../model/slots.model").model;
 
-//[GET] /staff/viewStudent/create
+//[GET] /staff/viewSlot/create
 const create = (req, res, next) => {
-  res.render("staff/students/createStudent",{
+  res.render("staff/slots/createSlot",{
     rolePage: req.rolePage,
     link: `/${req.role}`,
     avatar: req.avatar,
@@ -11,21 +10,13 @@ const create = (req, res, next) => {
   });
 };
 
-//[POST] /staff/viewStudent/store
+//[POST] /staff/viewSlot/store
 const store = async (req, res, next) => {
   try{
-    await new Students({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      age: req.body.age,
-      phone: req.body.phone,
-      address: req.body.address,
-      role: "trainee",
-    }).save();
-    return res.redirect('/staff/viewStudent')
+    await new Slots(req.body).save();
+    return res.redirect('/staff/viewSlot')
   }catch(err){
-    return res.render("staff/students/createStudent",{
+    return res.render("staff/slots/createSlot",{
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
@@ -35,12 +26,13 @@ const store = async (req, res, next) => {
   }
 };
 
-//[GET] /staff/viewStudent
+//[GET] /staff/viewSlot
 const show = async (req, res, next) => {
   try {
-    let students = await Students.find({ role: "trainee" })
-    res.render("staff/students/viewStudent", {
-      students: students,
+    let slots = await Slots.find()
+
+    return res.render("staff/slots/viewSlot", {
+      slots: slots,
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
@@ -48,16 +40,16 @@ const show = async (req, res, next) => {
     });
   }
   catch(err) {
-    next(err);
+    return next(err);
   }
 };
 
-//[GET] /staff/viewStudent/:id/edit
+//[GET] /staff/viewSlot/:id/edit
 const edit = async (req, res, next) => {
   try {
-    let student = await Students.findOne({ _id: req.params.id })
-    res.render("staff/students/editStudent", {
-      student: student,
+    let slot = await Slots.findOne({ _id: req.params.id })
+    res.render("staff/slots/editSlot", {
+      slot: slot,
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
@@ -65,7 +57,7 @@ const edit = async (req, res, next) => {
     });
   }
   catch(err){
-    return res.render("staff/students/editStudent",{
+    return res.render("staff/slots/editSlot",{
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
@@ -75,14 +67,14 @@ const edit = async (req, res, next) => {
   }
 };
 
-//[PUT] /staff/viewStudent/:id
+//[PUT] /staff/viewSlot/:id
 const update = async (req, res, next) => {
   try{
-    await Students.updateOne({ _id: req.params.id }, req.body)
-    return res.redirect('/staff/viewStudent');
+    await Slots.updateOne({ _id: req.params.id }, req.body)
+    return res.redirect('/staff/viewSlot');
   }catch(err){
-    let student = await Students.findOne({ _id: req.params.id })
-    res.render("staff/students/editStudent", {
+    let student = await Slots.findOne({ _id: req.params.id })
+    res.render("staff/slots/editSlot", {
       student: student,
       rolePage: req.rolePage,
       link: `/${req.role}`,
@@ -94,36 +86,34 @@ const update = async (req, res, next) => {
     
 };
 
-//[DELETE] /staff/viewStudent/:id
-const deleteS = async (req, res, next) => {
+//[DELETE] /staff/viewSlot/:id
+const destroy = async (req, res, next) => {
   try {
-    let student = await Students.deleteOne({ _id: req.params.id })
-    res.redirect("/staff/viewStudent")
+    let student = await Slots.deleteOne({ _id: req.params.id })
+    res.redirect("/staff/viewSlot")
   }
   catch(err) {
     next(err);
   }
 };
 
-//[GET] /staff/viewStudent/search
+//[GET] /staff/viewSlot/search
 const search = async (req, res, next) => {
   try {
-    let student = await Students.findOne({
-      $and: [{ name: req.query.search }, { role: "trainee" }],
-    })
-    if (student) {
-      return res.render("staff/students/viewStudent", {
-        student: student,
+    let slot = await Slots.findOne({ name: req.query.search })
+    if (slot) {
+      return res.render("staff/slots/viewSlot", {
+        slot: slot,
         rolePage: req.rolePage,
         link: `/${req.role}`,
         avatar: req.avatar,
         email: req.email,
       });
     }
-    const searchStudent = new RegExp(req.query.search, "i");
-    let students = await Students.find({ $and: [{ name: searchStudent }, { role: "trainee" }] })
-    res.render("staff/students/viewStudent", {
-      students: students,
+    const searchSlot = new RegExp(req.query.search, "i");
+    let slots = await Slots.find({ name: searchSlot })
+    res.render("staff/slots/viewSlot", {
+      slots: slots,
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
@@ -135,14 +125,14 @@ const search = async (req, res, next) => {
   }
 };
 
-const student = {
+const slot = {
   create,
   store,
   show,
   edit,
   update,
-  deleteS,
+  destroy,
   search,
 };
 
-module.exports = student;
+module.exports = slot;

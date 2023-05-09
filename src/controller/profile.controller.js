@@ -32,13 +32,27 @@ const changePassword = async (req, res, next) => {
     if (!user) return res.send(401);
     if (!bcrypt.compareSync(req.body.password, user.password))
       return res.render('profile/viewChangePassword', {
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword,
+        newPassword: req.body.newPassword,
         rolePage: req.rolePage,
         link: `/${req.role}`,
         avatar: req.avatar,
         email: req.email,
         passwordError: true,
       })
-    if (newPasswordLength >= 6 && req.body.password != req.body.newPassword) {
+    if (req.body.confirmPassword !== req.body.newPassword)
+      return res.render('profile/viewChangePassword', {
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword,
+        newPassword: req.body.newPassword,
+        rolePage: req.rolePage,
+        link: `/${req.role}`,
+        avatar: req.avatar,
+        email: req.email,
+        confirmPasswordError: true,
+      })
+    if (newPasswordLength >= 6 && req.body.password !== req.body.newPassword) {
       const salt = bcrypt.genSaltSync(10);
       let passwordHash = bcrypt.hashSync(req.body.newPassword, salt);
       await User.updateOne({ _id: req.id }, { password: passwordHash })
@@ -46,6 +60,9 @@ const changePassword = async (req, res, next) => {
     } else {
       return res.render('profile/viewChangePassword', {
         rolePage: req.rolePage,
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword,
+        newPassword: req.body.newPassword,
         link: `/${req.role}`,
         avatar: req.avatar,
         email: req.email,

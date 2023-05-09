@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
       !userInDB ||
       !bcrypt.compareSync(req.body.password, userInDB.password)
     ) {
-      return res.render('login/index',{
+      return res.render('login/index', {
         failedLogin: true,
       })
     }
@@ -21,9 +21,9 @@ const login = async (req, res, next) => {
       id: userInDB.id,
       email: userInDB.email,
       role: userInDB.role,
-      avatar : userInDB.avatar,
+      avatar: userInDB.avatar,
     };
-    
+
     req.session.user = userData;
 
     const role = userData.role;
@@ -36,6 +36,9 @@ const login = async (req, res, next) => {
         break;
       case "trainer":
         res.redirect("/trainer");
+        break;
+      case "trainee":
+        res.redirect("/trainee");
         break;
       default:
         res.redirect("/profile");

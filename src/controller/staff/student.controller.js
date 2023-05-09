@@ -1,5 +1,5 @@
+const {model: Course, Courses} = require("../../model/courses.model");
 const Students = require("../../model/users.model").model;
-const Roles = require("../../model/roles.model");
 
 //[GET] /staff/viewStudent/create
 const create = (req, res, next) => {
@@ -17,7 +17,6 @@ const store = async (req, res, next) => {
     await new Students({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
       age: req.body.age,
       phone: req.body.phone,
       address: req.body.address,
@@ -39,8 +38,33 @@ const store = async (req, res, next) => {
 const show = async (req, res, next) => {
   try {
     let students = await Students.find({ role: "trainee" })
+    let dateNow;
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 7;
+    let countPage;
+    let arrayCountPage = [];
+    let start = (page - 1) * perPage;
+    let end = page * perPage;
+    for (let student of students) {
+      let date = new Date(student.createdAt * 1000);
+      if (date.getSeconds() < 10) {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+      } else {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      }
+      student.dateCreated = dateNow;
+    }
+    countPage = Math.ceil(students.length / perPage);
+
+    for(let i = 1; i <= countPage; i++) {
+      arrayCountPage.push(i);
+    }
+    let pageIndex = page - 1;
     res.render("staff/students/viewStudent", {
-      students: students,
+      countPage,
+      pageIndex,
+      arrayCountPage,
+      students: students.slice(start, end),
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,
@@ -53,9 +77,9 @@ const show = async (req, res, next) => {
 };
 
 //[GET] /staff/viewStudent/:id/edit
-const edit = (req, res, next) => {
+const edit = async (req, res, next) => {
   try {
-    let student = Students.findOne({ _id: req.params.id })
+    let student = await Students.findOne({ _id: req.params.id })
     res.render("staff/students/editStudent", {
       student: student,
       rolePage: req.rolePage,
@@ -65,7 +89,13 @@ const edit = (req, res, next) => {
     });
   }
   catch(err){
-    next(err);
+    return res.render("staff/students/editStudent",{
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+      addFailed : true,
+    });
   }
 };
 
@@ -91,7 +121,15 @@ const update = async (req, res, next) => {
 //[DELETE] /staff/viewStudent/:id
 const deleteS = async (req, res, next) => {
   try {
-    let student = await Students.deleteOne({ _id: req.params.id })
+    const coursesDB = await Course.find({ idTrainee: req.params.id });
+
+    for(let course of coursesDB) {
+      await Course.updateOne(
+          { _id: course._id },
+          { $pull: { idTrainee: req.params.id } }).exec();
+    }
+
+    await Students.deleteOne({ _id: req.params.id });
     res.redirect("/staff/viewStudent")
   }
   catch(err) {
@@ -105,8 +143,31 @@ const search = async (req, res, next) => {
     let student = await Students.findOne({
       $and: [{ name: req.query.search }, { role: "trainee" }],
     })
+    let students;
+    let dateNow;
+    const perPage = 7;
+    const page = parseInt(req.query.page) || 1;
+    let countPage;
+    let arrayCountPage = [];
+    let start = (page - 1) * perPage;
+    let end = page * perPage;
+    let pageIndex = page - 1;
+
+    if (student) {
+      let date = new Date(student.createdAt * 1000);
+      if (date.getSeconds() < 10) {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+      } else {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      }
+      student.dateCreated = dateNow;
+    }
     if (student) {
       return res.render("staff/students/viewStudent", {
+        nameSearch: req.query.search,
+        countPage: 1,
+        pageIndex,
+        arrayCountPage : [1],
         student: student,
         rolePage: req.rolePage,
         link: `/${req.role}`,
@@ -115,9 +176,28 @@ const search = async (req, res, next) => {
       });
     }
     const searchStudent = new RegExp(req.query.search, "i");
-    let students = await Students.find({ $and: [{ name: searchStudent }, { role: "trainee" }] })
+    students = await Students.find({ $and: [{ name: searchStudent }, { role: "trainee" }] })
+    for (let student of students) {
+      let date = new Date(student.createdAt * 1000);
+      if (date.getSeconds() < 10) {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:0${date.getSeconds()}`;
+      } else {
+        dateNow = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      }
+      student.dateCreated = dateNow;
+    }
+    countPage = Math.ceil(students.length / perPage);
+
+    for(let i = 1; i <= countPage; i++) {
+      arrayCountPage.push(i);
+    }
+
     res.render("staff/students/viewStudent", {
-      students: students,
+      nameSearch: req.query.search,
+      countPage,
+      pageIndex,
+      arrayCountPage,
+      students: students.slice(start, end),
       rolePage: req.rolePage,
       link: `/${req.role}`,
       avatar: req.avatar,

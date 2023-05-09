@@ -10,54 +10,61 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sideBar.css">
 </head>
 
 <body>
     {{> header}}
-    <div class="container">
-        <div class="d-flex justify-content-between">
-            <div>
-                <a class="mt-4 me-4 btn btn-success" href="/staff/viewCourses">Course List</a>
-                <h1>List of deleted courses</h1>
+    <div class="wrapper">
+        {{> sidebarStaff}}
+        <div class="main_content">
+            <div class="container">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a class="mt-4 me-4 btn btn-success" href="/staff/viewCourses">Course List</a>
+                        <h1>List of deleted courses</h1>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead class="bg-warning">
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Deletion time</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each courses}}
+                        <tr>
+                            <th>{{sum @index}}</th>
+                            <td>{{this.name}}</td>
+                            {{#each ../categories}}
+                            {{#if (compare this._id ../this.idCategory)}}
+                            <td>{{this.name}}</td>
+                            {{/if}}
+                            {{/each}}
+                            <td>{{this.description}}</td>
+                            <td>{{this.dateDeleted}}</td>
+                            <td>
+                                <a class="btn btn-primary btn-restore" href="" data-id="{{this._id}}">Restore</a>
+                                <a class="btn btn-danger" href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="{{this._id}}">Permanently delete</a>
+                            </td>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td colspan="6" class="text-center">No courses have been deleted yet</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
             </div>
         </div>
-        <table class="table table-hover">
-            <thead class="bg-warning">
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Course</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Deletion time</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each courses}}
-                <tr>
-                    <th>{{sum @index}}</th>
-                    <td>{{this.name}}</td>
-                    {{#each ../categories}}
-                    {{#if (compare this._id ../this.idCategory)}}
-                    <td>{{this.name}}</td>
-                    {{/if}}
-                    {{/each}}
-                    <td>{{this.description}}</td>
-                    <td>{{this.dateDeleted}}</td>
-                    <td>
-                        <a class="btn btn-primary btn-restore" href="" data-id="{{this._id}}">Restore</a>
-                        <a class="btn btn-danger" href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-id="{{this._id}}">Permanently delete</a>
-                    </td>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan="6" class="text-center">No courses have been deleted yet</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
     </div>
+
     {{> footer}}
     <!-- Button trigger modal -->
 

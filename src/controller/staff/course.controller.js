@@ -1,4 +1,4 @@
-const Courses = require("../../model/courses.model");
+const Courses = require("../../model/courses.model").model;
 const Categories = require("../../model/categories.model").model;
 const Users = require("../../model/users.model").model;
 
@@ -19,6 +19,7 @@ const show = async (req, res, next) => {
             }
             course.dateCreated = dateNow;
         }
+
         res.render("staff/courses/viewCourses", {
             courses: courses,
             countDocumentsDeleted,
@@ -51,8 +52,8 @@ const create = async (req, res, next) => {
 //[POST] /staff/viewCourse/store
 const store = async (req, res, next) => {
     try {
-            await new Courses(req.body).save();
-            res.redirect("/staff/viewCourses");
+        await new Courses(req.body).save();
+        res.redirect("/staff/viewCourses");
     } catch (err) {
         const categories = await Categories.find({});
         return res.render("staff/courses/create", {
@@ -209,7 +210,7 @@ const deleteForce = async (req, res, next) => {
 const showDetail = async (req, res, next) => {
     try {
         const course = await Courses.findOne({ _id: req.params.id });
-        const trainer = await Users.findOne({ $and: [{ role: "trainer" }, { _id: course.idTrainer }] });
+        const trainer = await Users.findOne({ $and: [{ role: "trainer" }, { _id: course.idTrainer }] });    
         const trainees = await Users.find({ $and: [{ role: "trainee" }, { _id: course.idTrainee }] });
         const category = await Categories.findOne({ _id: course.idCategory });
         course.nameCategory = category.name;

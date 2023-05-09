@@ -1,5 +1,9 @@
 const users = require("../../model/users.model");
 const categories = require("../../model/categories.model");
+const {model: Schedules} = require("../../model/schedules.model");
+const {model: Courses} = require("../../model/courses.model");
+const {model: Slots} = require("../../model/slots.model");
+const {model: Users} = require("../../model/users.model");
 const Course = require("../../model/courses.model").model;
 const Category = categories.model;
 const User = users.model;
@@ -322,6 +326,95 @@ const searchTrainees = async (req, res, next) => {
   }
 };
 
+const viewSchedules = async (req, res, next) => {
+  try {
+    let schedules = await Schedules.find({idCourse: req.params.id}).exec()
+    const course = await Courses.findOne({_id: req.params.id}).exec()
+    const trainees = await Users.find({ $and: [{ role: "trainee" }, { _id: course.idTrainee }] });
+
+    for (let schedule of schedules) {
+      const slot = await Slots.findOne({_id: schedule?.idSlot}).exec()
+
+      schedule.slot = `${slot?.name} (${slot?.startTime} - ${slot?.endTime})`;
+      schedule.time = schedule.date?.toDateString();
+      schedule.attendance = null;
+
+      if (schedule.idPresent.includes(req.id)) {
+        schedule.attendance = true;
+        continue;
+      }
+
+      if (schedule.idAbsent.includes(req.id)) {
+        schedule.attendance = false;
+      }
+
+      if (schedule.date < new Date()) {
+        schedule.attendance = false
+      }
+    }
+
+
+    res.render("trainee/viewSchedules", {
+      course,
+      schedules: schedules,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  }catch (err) {
+    next(err);
+  }
+}
+
+const searchSchedules = async (req, res, next) => {
+  try {
+    let schedules = await Schedules.find({idCourse: req.params.id}).exec()
+    const course = await Courses.findOne({_id: req.params.id}).exec()
+
+    const searchSchedule = new RegExp(req.query.search, "i");
+
+    let results = [];
+
+    for (let schedule of schedules) {
+      const slot = await Slots.findOne({_id: schedule?.idSlot}).exec()
+
+      schedule.slot = `${slot?.name} (${slot?.startTime} - ${slot?.endTime})`;
+      schedule.time = schedule.date.toDateString();
+      schedule.attendance = null;
+      schedule.checkAttendance = 'Not Yet'
+
+      if (schedule.idPresent.includes(req.id)) {
+        schedule.attendance = true;
+        schedule.checkAttendance = 'Present'
+      }
+
+      if (schedule.idAbsent.includes(req.id)) {
+        schedule.attendance = false;
+        schedule.checkAttendance = 'Absent'
+      }
+
+      if (schedule.time.match(searchSchedule) ||
+          schedule.slot.match(searchSchedule) ||
+          schedule.checkAttendance.match(searchSchedule)
+      ) {
+        results.push(schedule)
+      }
+    }
+
+    res.render("trainee/viewSchedules", {
+      course,
+      schedules: req.query.search ? results : schedules,
+      rolePage: req.rolePage,
+      link: `/${req.role}`,
+      avatar: req.avatar,
+      email: req.email,
+    });
+  }catch (err) {
+    next(err);
+  }
+}
+
 const trainee = {
   showCourses,
   showCoursesInCategory,
@@ -329,6 +422,8 @@ const trainee = {
   searchCourses,
   searchCoursesInCategory,
   searchTrainees,
+  viewSchedules,
+  searchSchedules
 };
 
 module.exports = trainee;

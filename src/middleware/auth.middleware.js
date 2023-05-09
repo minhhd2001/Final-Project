@@ -25,6 +25,9 @@ const checkLogout = (req, res, next) => {
             case 'trainer':
                 res.redirect('/trainer')
             break;
+            case 'trainee':
+                res.redirect('/trainee')
+            break;
             default :
                 res.redirect('/profile')
             break;

@@ -1,5 +1,5 @@
 const Categories = require("../../model/categories.model").model;
-const Courses = require("../../model/courses.model");
+const Courses = require("../../model/courses.model").model;
 
 //[GET] /staff/viewCategory/create
 const create = (req, res, next) => {

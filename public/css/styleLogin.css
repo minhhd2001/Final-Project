@@ -17,6 +17,11 @@ body{
     left: 10%;
     color: #2d3791;
 }
+.text-loginUser{
+    top: 30%;
+    left: 10%;
+    color: #2d3791;
+}
 .text-login p:first-child{
     font-size: 28px;
 }

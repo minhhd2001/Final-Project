@@ -11,17 +11,21 @@
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sideBar.css">
+    <link rel="stylesheet" href="/css/styleLogin.css">
     <style>
-        .body-right{
+        .body-right {
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
         }
-        .body-right button{
+
+        .body-right button {
             margin-bottom: 50px;
         }
-        .body-right button a{
+
+        .body-right button a {
             font-size: 30px;
             color: black;
         }
@@ -33,19 +37,17 @@
     <div class="body">
         <div class="row w-100">
             <div class="col">
-                <img src="/images/bg-body.png" alt="bg-body" style="width: 100%; height: 700px">
+                <img src="/images/event.jpg" alt="bg-body" style="width: 100%; height: 800px">
             </div>
             <div class="col body-right" style="padding-right: 0;">
-                <div>
-                    <button class="btn btn-light">
-                        <a href="/staff/viewStudent" style="text-decoration: none">Manage Student</a><br>
+                <div class="text-loginUser">
+                    <p style="font-size: 45px;">Welcome to</p>
+                    <h2 style="font-size: 45px;">University of Greenwich in Vietnam</h2>
+                    <div class="line"></div>
+                    <p style="font-size: 35px;">Joint training with FPT University</p><br>
+                    <button class="me-5 btn btn-success">
+                        <a style="text-decoration: none" href="/staff/viewStudent">Management System</a><br>
                     </button><br>
-                    <button class="btn btn-light">
-                        <a href="/staff/viewCourses" style="text-decoration: none">Manage Courses</a><br>
-                    </button><br>
-                    <button class="btn btn-light">
-                        <a href="/staff/viewCategory" style="text-decoration: none">Manage Categories</a><br>
-                    </button>
                 </div>
             </div>
         </div>

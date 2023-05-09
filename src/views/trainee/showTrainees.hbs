@@ -11,6 +11,7 @@
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sideBar.css">
     <style>
         .active {
             background-color: black !important;
@@ -20,77 +21,86 @@
 
 <body>
     {{> header}}
-    <div class="container">
-        <h1>This is {{course.name}} course</h1>
-        <div class="d-flex justify-content-between">
-            <div>
-                <form method="get" action="/trainee/searchtrainees/{{course.id}}">
-                    <input type="text" name="search">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
+    <div class="wrapper">
+        {{> sidebarTrainee}}
+        <div class="main_content">
+            <div class="container">
+                <h1>This is {{course.name}} course</h1>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <form method="get" action="/trainee/searchtrainees/{{course.id}}">
+                            <input type="text" name="search">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead class="bg-warning text-center">
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody class='text-center'>
+                        {{#if trainers}}
+                        {{#each trainers}}
+                        <tr>
+                            <th>Teacher</th>
+                            <th>{{this.name}}</th>
+                            <th class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100"
+                                    height="120"></th>
+                            <th>{{this.age}}</th>
+                            <th>{{this.email}}</th>
+                            <th>{{this.phone}}</th>
+                            {{else}}
+                        <tr>
+                            <td colspan="5" class="text-center">No students found</td>
+                        </tr>
+                        {{/each}}
+                        {{/if}}
+                        {{#if trainees}}
+                        {{#each trainees}}
+                        <tr>
+                            <th>{{sum @index}}</th>
+                            <td>{{this.name}}</td>
+                            <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100"
+                                    height="120"></td>
+                            <td>{{this.age}}</td>
+                            <td>{{this.email}}</td>
+                            <td>{{this.phone}}</td>
+                            {{else}}
+                        <tr>
+                            <td colspan="5" class="text-center">No students found</td>
+                        </tr>
+                        {{/each}}
+                        {{else}}
+                        {{#if trainee}}
+                        <tr>
+                            <th>1</th>
+                            <td>{{trainees.name}}</td>
+                            <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100"
+                                    height="120"></td>
+                            <td>{{trainees.age}}</td>
+                            <td>{{trainees.email}}</td>
+                            <td>{{trainees.phone}}</td>
+                        </tr>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td colspan='6' class='text-center'>Can't find this students</td>
+                        </tr>
+                        {{/if}}
+                        {{/if}}
+                    </tbody>
+                </table>
             </div>
         </div>
-        <table class="table table-hover">
-            <thead class="bg-warning text-center">
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Avatar</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                </tr>
-            </thead>
-            <tbody class='text-center'>
-                {{#if trainers}}
-                {{#each trainers}}
-                <tr>
-                    <th>Teacher</th>
-                    <th>{{this.name}}</th>
-                    <th class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></th>
-                    <th>{{this.age}}</th>
-                    <th>{{this.email}}</th>
-                    <th>{{this.phone}}</th>
-                {{else}}
-                <tr>
-                    <td colspan="5" class="text-center">No students found</td>
-                </tr>
-                {{/each}}
-                {{/if}}
-                {{#if trainees}}
-                {{#each trainees}}
-                <tr>
-                    <th>{{sum @index}}</th>
-                    <td>{{this.name}}</td>
-                    <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></td>
-                    <td>{{this.age}}</td>
-                    <td>{{this.email}}</td>
-                    <td>{{this.phone}}</td>
-                {{else}}
-                <tr>
-                    <td colspan="5" class="text-center">No students found</td>
-                </tr>
-                {{/each}}
-                {{else}}
-                {{#if trainee}}
-                <tr >
-                    <th>1</th>
-                    <td>{{trainees.name}}</td>
-                    <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></td>
-                    <td>{{trainees.age}}</td>
-                    <td>{{trainees.email}}</td>
-                    <td>{{trainees.phone}}</td>
-                </tr>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan='6' class='text-center'>Can't find this students</td>
-                </tr>
-                {{/if}}
-                {{/if}}
-            </tbody>
-        </table>
     </div>
+
     {{> footer}}
 
     <!-- JavaScript Bundle with Popper -->

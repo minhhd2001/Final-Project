@@ -14,7 +14,7 @@ const roles = new Schema({
 const roleModel = mongoose.model('Role', roles);
 
 function initialize() {
-    roleModel.estimatedDocumentCount((err, count) => {
+     roleModel.estimatedDocumentCount((err, count) => {
         if(!err && count === 0) {
             new roleModel({
                 name: 'admin',

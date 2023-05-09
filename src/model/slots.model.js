@@ -7,7 +7,6 @@ const slot = new Schema({
     description: { type: String },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
-    order: { type: Number, required: true}
 },{
     timestamps : { currentTime: () => Math.floor(Date.now() / 1000) },
 });
@@ -29,7 +28,6 @@ function initialize(){
             new slotsModel({
                 name: `Slot ${index + 1}`,
                 description: `Slot ${index + 1}`,
-                order: index,
                 startTime: startTimes[index],
                 endTime: endTimes[index]
             }).save((err) => {

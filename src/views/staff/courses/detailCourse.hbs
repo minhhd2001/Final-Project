@@ -10,69 +10,81 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sideBar.css">
 </head>
 
 <body>
     {{> header}}
-    <div class="container mb-5">
-        <h1 class="text-center">{{course.name}} course</h1>
-        <div class="my-3">
-            <a class="text-decoration-none" href="/staff/viewCourses" style="font-size: 20px">VIEW COURSE PAGE</a>
-        </div>
-        <div class="top">
-            <div class="row">
-                <div class="col">
-                    <p><span>Name Course: </span>{{course.name}}</p>
-                    <p><span>Description Course: </span>{{course.description}}</p>
-                    <p><span>Name Category: </span>{{course.nameCategory}}</p>
-                    <p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Name Trainer: <span class="trainer-name">{{course.nameTrainer}}</span></span>
-                        <button class="btn btn-danger btn-close-trainer" data-bs-toggle="modal"
-                            data-bs-target="#deleteModalTrainer" data-id="{{course._id}}"
-                            data-idTrainer="{{course.idTrainer}}" style="margin-right: 130px;">Delete trainer</button>
+    <div class="wrapper">
+        {{> sidebarStaff}}
+        <div class="main_content">
+            <div class="container mb-5">
+                <h1 class="text-center">{{course.name}} course</h1>
+                <div class="my-3">
+                    <a class="text-decoration-none" href="/staff/viewCourses" style="font-size: 20px">VIEW COURSE
+                        PAGE</a>
+                </div>
+                <div class="top">
+                    <div class="row">
+                        <div class="col">
+                            <p><span>Name Course: </span>{{course.name}}</p>
+                            <p><span>Description Course: </span>{{course.description}}</p>
+                            <p><span>Name Category: </span>{{course.nameCategory}}</p>
+                            <p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Name Trainer: <span class="trainer-name">{{course.nameTrainer}}</span></span>
+                                <button class="btn btn-danger btn-close-trainer" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModalTrainer" data-id="{{course._id}}"
+                                    data-idTrainer="{{course.idTrainer}}" style="margin-right: 130px;">Delete
+                                    trainer</button>
+                            </div>
+                            <a href="/staff/viewCourses/{{course._id}}/viewAddTrainer"
+                                class="btn btn-success btn-addTrainer">Add
+                                Trainer</a>
+                            </p>
+                            <p>
+                            <p>List of trainees in the course: </p>
+                            <a href="/staff/viewCourses/{{course._id}}/viewAddTrainee" class="btn btn-success">Add
+                                Trainee</a>
+                            </p>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No .</th>
+                                        <th scope="col">Avatar</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each course.objTrainee}}
+                                    <tr>
+                                        <th scope="row">{{sum @index}}</th>
+                                        <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100"
+                                                height="120"></td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.email}}</td>
+                                        <td>
+                                            <button class="btn btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" data-id="{{../course._id}}"
+                                                data-idTrainee="{{this._id}}">Delete</button>
+                                        </td>
+                                    </tr>
+                                    {{else}}
+                                    <tr>
+                                        <td colspan="5" class="text-center">This course has no trainees yet</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <a href="/staff/viewCourses/{{course._id}}/viewAddTrainer"
-                        class="btn btn-success btn-addTrainer">Add
-                        Trainer</a>
-                    </p>
-                    <p>
-                    <p>List of trainees in the course: </p>
-                    <a href="/staff/viewCourses/{{course._id}}/viewAddTrainee" class="btn btn-success">Add Trainee</a>
-                    </p>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">No .</th>
-                                <th scope="col">Avatar</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each course.objTrainee}}
-                            <tr>
-                                <th scope="row">{{sum @index}}</th>
-                                <td class='text-center'><img src="/images/{{this.avatar}}" alt="avt" width="100" height="120"></td>
-                                <td>{{this.name}}</td>
-                                <td>{{this.email}}</td>
-                                <td>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        data-id="{{../course._id}}" data-idTrainee="{{this._id}}">Delete</button>
-                                </td>
-                            </tr>
-                            {{else}}
-                            <tr>
-                                <td colspan="5" class="text-center">This course has no trainees yet</td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
+
     {{> footer }}
 
     <!-- Modal -->

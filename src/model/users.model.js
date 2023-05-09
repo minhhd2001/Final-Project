@@ -31,83 +31,68 @@ user.plugin(mongooseDelete,{overrideMethod: 'all', deleteAt: true});
 const userModel = mongoose.model('User', user);
 
 function initialize() {
-    userModel.estimatedDocumentCount((err, count) => {
+    userModel.estimatedDocumentCount( (err, count) => {
         if(!err && count === 0){
-            rolesModel.findOne({name: 'admin'},(err,result) => {
-                if(err && !result){
-                    console.log(err);
-                }
-                else{
-                    new userModel({
-                        name: 'admin',
-                        email : 'admin@fpt.edu.vn',
-                        age: 20, 
-                        phone : '0373569708',
-                        address: 'Hà Nội',
-                        role : result.name
-                    }).save((err)=>{
-                        if(err) console.log(err);
-                        else console.log('Add admin user !');
-                    })
-                }
+            new userModel({
+                name: 'Admin',
+                email : 'admin@fpt.edu.vn',
+                age: 20,
+                phone : '0373569708',
+                address: 'Hà Nội',
+                role : 'admin'
+            }).save((err)=>{
+                if(err) console.log(err);
+                else console.log('Add admin user !');
             })
 
-            //
-            rolesModel.findOne({name: 'staff'},(err,result) => {
-                if(err && !result){
-                    console.log(err);
-                }
-                else{
-                    const salt = bcrypt.genSaltSync(10);
-                    let passwordHash = bcrypt.hashSync('123456', salt);
+            for (let index = 0; index < 1; index++) {
+                new userModel({
+                    name: `Staff ${index + 1}`,
+                    email : `staff${index + 1}@fpt.edu.vn`,
+                    age: 20,
+                    phone : '0373569708',
+                    address: 'Hà Nội',
+                    role : 'staff'
+                }).save((err)=>{
+                    if(err) console.log(err);
+                    else console.log('Add staff user !');
+                })
+            }
 
-                    new userModel({
-                        name: 'staff',
-                        email : 'staff@fpt.edu.vn',
-                        password : passwordHash,
-                        age: 20, 
-                        phone : '0373569708',
-                        address: 'Hà Nội',
-                        role : result.name
-                    }).save((err)=>{
-                        if(err) console.log(err);
-                        else console.log('Add staff user !');
-                    })
-                }
-            })
-            //
-            //
-            // rolesModel.findOne({name: 'trainer'},(err,result) => {
-            //     if(err && !result){
-            //         console.log(err);
-            //     }
-            //     else{
-            //         const salt = bcrypt.genSaltSync(10);
-            //         let passwordHash = bcrypt.hashSync('123456', salt);
+            for (let index = 0; index < 5; index++) {
+                 new userModel({
+                    name: `Trainer ${index + 1}`,
+                    email: `trainer${index + 1}@fpt.edu.vn`,
+                    age: 21,
+                    phone: '0373569708',
+                    address: 'Hà Nội 2',
+                    role: 'trainer'
+                }).save((err) => {
+                    if (err) console.log(err);
+                    else console.log('Add trainer user !');
+                })
+            }
 
-            //         new userModel({
-            //             name: 'trainer',
-            //             email : 'trainerD@fpt.edu.vn',
-            //             password : passwordHash,
-            //             age: 21, 
-            //             phone : '0373569708',
-            //             address: 'Hà Nội 2',
-            //             role : result.name
-            //         }).save((err)=>{
-            //             if(err) console.log(err);
-            //             else console.log('Add trainer user !');
-            //         })
-            //     }
-            // })
-            //
-
+            for (let index = 0; index < 20; index++) {
+                new userModel({
+                    name: `Trainee ${index + 1}`,
+                    email: `trainee${index + 1}@fpt.edu.vn`,
+                    age: 21,
+                    phone: '0373569708',
+                    address: 'Hà Nội 2',
+                    role: 'trainee'
+                }).save((err) => {
+                    if (err) console.log(err);
+                    else console.log('Add trainee user !');
+                })
+            }
         }
     })
 }
 
 const Users = {
     model : userModel,
-    initialize: initialize,
+    initialize: initialize(),
 }
 module.exports = Users;
 

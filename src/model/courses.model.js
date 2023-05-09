@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongooseDelete = require('mongoose-delete');
 const category = require('./categories.model');
+const userModel = require('./users.model').model;
 const Schema = mongoose.Schema;
 const categoryModel = category.model;
 
@@ -14,38 +15,95 @@ const course = new Schema({
     timestamps : { currentTime: () => Math.floor(Date.now() / 1000) },
 });
 
-
-
-
-
-
-
-
-
 course.plugin(mongooseDelete, { overrideMethods: 'all', deletedAt: true});
 
-module.exports = mongoose.model('courses', course);
+const courseModel = mongoose.model('courses', course);
 
-// const courseModel = mongoose.model('courses', course);
+function initialize(){
+   courseModel.estimatedDocumentCount(async (err, count) => {
+       if (err || count > 0) {
+           return ;
+       }
 
-// function initialize(){
-//     categoryModel.findOne({name:'IT'},(err, result) => {
-//         new courseModel({
-//             name: 'Application',
-//             description: 'Application',
-//             idCategory: result._id,
-//             idTrainer: 2,
-//             idTrainee: [3, 4]
-//         }).save((err)=>{
-//             if(err) console.log(err);
-//             else console.log('Add course successful !');
-//         })
-//     })
-// }
+       const trainees = (await userModel.find({role: 'trainee'}).exec()).map(trainee => trainee['_id']);
+       const trainers = (await userModel.find({role: 'trainer'}).exec()).map(trainer => trainer['_id']);
+       const categories = await categoryModel.find({});
 
-// const Courses = {
-//     model: courseModel,
-//     initialize : initialize,
-// };
+       await new courseModel({
+           name: `Course Application`,
+           description: `Course Application`,
+           idCategory: categories[0]._id,
+           idTrainer: trainers[0],
+           idTrainee: trainees.slice(0, 3)
+       }).save((err) => {
+           if (err) {
+               console.log(err);
+           } else {
+               console.log('Add course successful!')
+           }
+       });
 
-// module.exports = Courses;
+       await new courseModel({
+           name: `Course Mobile`,
+           description: `Course Mobile`,
+           idCategory: categories[0]._id,
+           idTrainer: trainers[1],
+           idTrainee: trainees.slice(3, 6)
+       }).save((err) => {
+           if (err) {
+               console.log(err);
+           } else {
+               console.log('Add course successful!')
+           }
+       });
+
+       await new courseModel({
+           name: `Course Website`,
+           description: `Course Website`,
+           idCategory: categories[0]._id,
+           idTrainer: trainers[2],
+           idTrainee: trainees.slice(6, 9)
+       }).save((err) => {
+           if (err) {
+               console.log(err);
+           } else {
+               console.log('Add course successful!')
+           }
+       });
+
+       await new courseModel({
+           name: `Course Marketing`,
+           description: `Course Marketing`,
+           idCategory: categories[1]._id,
+           idTrainer: trainers[3],
+           idTrainee: trainees.slice(9, 11)
+       }).save((err) => {
+           if (err) {
+               console.log(err);
+           } else {
+               console.log('Add course successful!')
+           }
+       });
+
+       await new courseModel({
+           name: `Course Business`,
+           description: `Course Business`,
+           idCategory: categories[1]._id,
+           idTrainer: trainers[4],
+           idTrainee: trainees.slice(11, 15)
+       }).save((err) => {
+           if (err) {
+               console.log(err);
+           } else {
+               console.log('Add course successful!')
+           }
+       });
+   })
+}
+
+const Courses = {
+    model: courseModel,
+    initialize: initialize(),
+};
+
+module.exports = Courses;

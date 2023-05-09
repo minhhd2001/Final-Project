@@ -11,15 +11,18 @@
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sideBar.css">
     <style>
-        .trash{
+        .trash {
             position: relative;
         }
-        .trash i{
+
+        .trash i {
             color: #9fa5ab;
             font-size: 28px;
         }
-        .trash-count{
+
+        .trash-count {
             position: absolute;
             top: -10px;
             left: 15px;
@@ -32,21 +35,28 @@
             color: #c95a32;
             font-weight: 700;
         }
-        .animation-trash{
-            animation: trash 1s ease-in-out  1;
+
+        .animation-trash {
+            animation: trash 1s ease-in-out 1;
         }
-        .form-search:focus, .btn-search:focus,.btn-search:active:focus{
+
+        .form-search:focus,
+        .btn-search:focus,
+        .btn-search:active:focus {
             box-shadow: none;
         }
-        @keyframes trash{
-            0%{
+
+        @keyframes trash {
+            0% {
                 transform: scale(1);
             }
-            50%{
+
+            50% {
                 transform: scale(1.2);
                 color: #c94132;
             }
-            100%{
+
+            100% {
                 transform: scale(1);
             }
         }
@@ -55,88 +65,95 @@
 
 <body>
     {{> header}}
-    <div class="container">
-        <div class="d-flex justify-content-between mt-3">
-            <div class="d-flex">
-                <a class="me-5 btn btn-success" href="/staff/viewCourses/create">Add</a>
-                <a class="me-4 align-self-end text-decoration-none" href="/staff/viewCourses/trash/store">
-                    <div class="trash">
-                        <i class="fa fa-trash"></i>
-                        {{#if countDocumentsDeleted}}
-                            <span class="trash-count animation-trash">
-                                {{countDocumentsDeleted}}
-                            </span>
-                        {{else}}
-                            <span class="trash-count">
-                                {{countDocumentsDeleted}}
-                            </span>
-                        {{/if}}
+    <div class="wrapper">
+        {{> sidebarStaff}}
+        <div class="main_content">
+            <div class="container">
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="d-flex">
+                        <a class="me-5 btn btn-success" href="/staff/viewCourses/create">Add</a>
+                        <a class="me-4 align-self-end text-decoration-none" href="/staff/viewCourses/trash/store">
+                            <div class="trash">
+                                <i class="fa fa-trash"></i>
+                                {{#if countDocumentsDeleted}}
+                                <span class="trash-count animation-trash">
+                                    {{countDocumentsDeleted}}
+                                </span>
+                                {{else}}
+                                <span class="trash-count">
+                                    {{countDocumentsDeleted}}
+                                </span>
+                                {{/if}}
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            <div>
-                <form class="d-flex input-group" method="get" action="/staff/viewCourses/search">
-                    <input class="form-control form-search" type="text" name="search" id="search" placeholder="Search by name course">
-                    <button type="submit" class="btn btn-primary btn-search">Search</button>
-                </form>
+                    <div>
+                        <form class="d-flex input-group" method="get" action="/staff/viewCourses/search">
+                            <input class="form-control form-search" type="text" name="search" id="search"
+                                placeholder="Search by name course">
+                            <button type="submit" class="btn btn-primary btn-search">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-bordered my-3">
+                    <thead class="bg-warning">
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Posting time</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#if courses}}
+                        {{#each courses}}
+                        <tr>
+                            <th>{{sum @index}}</th>
+                            <td>{{this.name}}</td>
+                            <td>{{this.nameCategory}}</td>
+                            <td>{{this.description}}</td>
+                            <td>{{this.dateCreated}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-secondary" href="/staff/viewCourses/{{this._id}}">Course Details</a>
+                                <a class="btn btn-primary" href="/staff/viewCourses/{{this._id}}/edit">Edit</a>
+                                <a class="btn btn-danger" href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="{{this._id}}">Delete</a>
+                            </td>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td colspan="6" class="text-center">You don't have a course yet.</td>
+                        </tr>
+                        {{/each}}
+                        {{else}}
+                        {{#if course}}
+                        <tr>
+                            <th>1</th>
+                            <td>{{course.name}}</td>
+                            <td>{{course.nameCategory}}</td>
+                            <td>{{course.description}}</td>
+                            <td>{{course.dateCreated}}</td>
+                            <td>
+                                <a class="btn btn-secondary" href="/staff/viewCourses/{{course._id}}">Course details</a>    
+                                <a class="btn btn-primary" href="/staff/viewCourses/{{course._id}}/edit">Edit</a>
+                                <a class="btn btn-danger" href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="{{course._id}}">Delete</a>
+                            </td>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td colspan='6' class='text-center'>Can't find this course</td>
+                        </tr>
+                        {{/if}}
+                        {{/if}}
+                    </tbody>
+                </table>
             </div>
         </div>
-        <table class="table table-bordered my-3">
-            <thead class="bg-warning">
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Course</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Posting time</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#if courses}}
-                {{#each courses}}
-                <tr>
-                    <th>{{sum @index}}</th>
-                    <td>{{this.name}}</td>
-                    <td>{{this.nameCategory}}</td>
-                    <td>{{this.description}}</td>
-                    <td>{{this.dateCreated}}</td>
-                    <td class="text-center">
-                        <a class="btn btn-secondary" href="/staff/viewCourses/{{this._id}}">Details</a>
-                        <a class="btn btn-primary" href="/staff/viewCourses/{{this._id}}/edit">Edit</a>
-                        <a class="btn btn-danger" href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-id="{{this._id}}">Delete</a>
-                    </td>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan="6" class="text-center">You don't have a course yet.</td>
-                </tr>
-                {{/each}}
-                {{else}}
-                {{#if course}}
-                <tr>
-                    <th>1</th>
-                    <td>{{course.name}}</td>
-                    <td>{{course.nameCategory}}</td>
-                    <td>{{course.description}}</td>
-                    <td>{{course.dateCreated}}</td>
-                    <td>
-                        <a href="/staff/viewCourses/{{course._id}}/edit">Edit</a>
-                        <a href="" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-id="{{course._id}}">Delete</a>
-                        <a href="/staff/viewCourses/{{course._id}}">Course details</a>
-                    </td>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan='6' class='text-center'>Can't find this course</td>
-                </tr>
-                {{/if}}
-                {{/if}}
-            </tbody>
-        </table>
     </div>
+
     {{> footer}}
     <!-- Button trigger modal -->
 

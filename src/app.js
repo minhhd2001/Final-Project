@@ -11,9 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })) 
 app.set('view engine', 'hbs');
 app.use(methodOverride('_method'))
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, '../public')))
 app.set('views', path.join(__dirname, 'views'))
-
 hbs.registerPartials(__dirname + '/views/partials')
 
 hbs.registerHelper("sum", (count) =>{
@@ -37,6 +36,13 @@ app.use(session({
     secret: 'Group5', 
 
 }))
+
+hbs.registerHelper('isTrue', value => value === true);
+
+hbs.registerHelper('isFalse', value => value === false);
+
+hbs.registerHelper('isNull', value => value === null)
+
 const run = async ()=>{
     await db.connect();
     app.use('/', route)

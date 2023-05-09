@@ -44,6 +44,26 @@ router.delete('/viewStudent/:id', staffController.student.deleteS);
 router.get('/viewStudent/search', staffController.student.search);
 router.get('/viewStudent', staffController.student.show);
 
+// Router SLOT
+router.get('/viewSlot/create', staffController.slot.create);
+router.post('/viewSlot/store', staffController.slot.store);
+router.get('/viewSlot/:id/edit', staffController.slot.edit);
+router.put('/viewSlot/:id', staffController.slot.update);
+router.delete('/viewSlot/:id', staffController.slot.destroy);
+router.get('/viewSlot/search', staffController.slot.search);
+router.get('/viewSlot', staffController.slot.show);
+
+// Router SCHEDULES
+router.get('/viewSchedule/create', staffController.schedule.create);
+router.post('/viewSchedule/store', staffController.schedule.store);
+router.get('/viewSchedule/:id/edit', staffController.schedule.edit);
+router.put('/viewSchedule/:id', staffController.schedule.update);
+router.delete('/viewSchedule/:id', staffController.schedule.destroy);
+router.get('/viewSchedule/search', staffController.schedule.search);
+router.get('/viewSchedule/:id', staffController.schedule.detail);
+router.put('/viewSchedule/:id/attendance', staffController.schedule.attendance);
+router.get('/viewSchedule', staffController.schedule.show);
+
 //Router STAFF
 router.get('/',staffController.index);
 
