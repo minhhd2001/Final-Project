@@ -199,8 +199,8 @@ const showTrainees = async (req, res, next) => {
         const traineesDB = await User.find({
             $and: [{ _id: { $in: courseDB.idTrainee } }, { role: "trainee" }],
         });
-        if (traineesDB.length == 0)
-            return res.send("The course has no students yet");
+        // if (traineesDB.length == 0)
+        //     return res.send("The course has no students yet");
         const trainees = traineesDB.map((traineeDB) => {
             return {
                 name: traineeDB.name,

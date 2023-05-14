@@ -116,7 +116,7 @@ const show = async (req, res, next) => {
             const trainer = await Users.findOne({_id: course?.idTrainer}).exec()
 
             schedule.slot = `${slot?.name} (${slot?.startTime} - ${slot?.endTime})`;
-            schedule.course = !trainer?.name ? course.name : `${course.name} (${trainer?.name})`;
+            schedule.course = !trainer?.name ? course?.name : `${course?.name} (${trainer?.name})`;
             schedule.time = schedule.date.toDateString()
         }
 

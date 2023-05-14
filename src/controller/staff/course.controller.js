@@ -1,4 +1,5 @@
 const Courses = require("../../model/courses.model").model;
+const Schedules = require("../../model/schedules.model").model;
 const Categories = require("../../model/categories.model").model;
 const Users = require("../../model/users.model").model;
 
@@ -153,7 +154,8 @@ const search = async (req, res, next) => {
 //[DELETE] /staff/viewCourse/:id
 const destroy = async (req, res, next) => {
     try {
-        await Courses.delete({ _id: req.params.id });
+        const course = await Courses.delete({ _id: req.params.id });
+        // await Schedules.deleteMany({idCourse: req.params.id})
         res.redirect("back");
     } catch (err) {
         next(err);
@@ -200,8 +202,8 @@ const restore = async (req, res, next) => {
 //[DELETE] /staff/viewCourse/:id/force
 const deleteForce = async (req, res, next) => {
     try {
-        await Courses.deleteOne({ _id: req.params.id });
-        res.redirect("back");
+    await Courses.deleteOne({ _id: req.params.id });
+    res.redirect("back");
     } catch (err) {
         next(err);
     }
@@ -250,7 +252,7 @@ const viewAddTrainee = async (req, res, next) => {
         const course = await Courses.findOne({ _id: req.params.id })
         const traineesOutCourse = [];
         const page = parseInt(req.query.page) || 1;
-        const perPage = 3;
+        const perPage = 5;
         let countPage;
         let arrayCountPage = [];
         let start = (page - 1) * perPage;

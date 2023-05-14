@@ -20,7 +20,7 @@
         <div class="main_content">
             <div class="container">
                 {{#if addFailed}}
-                <div class="alert alert-danger mt-3" id="addFailed">Information Invalid</div>
+                <div class="alert alert-danger mt-3" id="addFailed">Email must be unique!!</div>
                 {{/if}}
                 <form class="mt-5" method="post" action="/admin/viewTrainer/{{trainer._id}}?_method=PUT">
                     <div class="mb-3">

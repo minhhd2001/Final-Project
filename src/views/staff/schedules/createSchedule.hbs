@@ -19,40 +19,45 @@
         {{> sidebarStaff}}
         <div class="main_content">
             <div class="container">
+                {{#if dateCheck}}
+                <div class="alert alert-danger mt-4" id="addFailed">Schedule date can't past!!</div>
+                {{/if}}
                 {{#if addFailed}}
-                    {{#if error}}
-                        <div class="alert alert-danger mt-4" id="addFailed">{{error}}</div>
-                    {{else}}
-                        <div class="alert alert-danger mt-4" id="addFailed">Information Invalid</div>
-                    {{/if}}
+                {{#if error}}
+                <div class="alert alert-danger mt-4" id="addFailed">{{error}}</div>
+                {{else}}
+                <div class="alert alert-danger mt-4" id="addFailed">Information Invalid</div>
+                {{/if}}
                 {{/if}}
                 <form class="mt-5" method="post" action="/staff/viewSchedule/store">
                     <div class="mb-3">
-                        <select class="form-select" name="idCourse" aria-label="Select course" value="idCourse" required>
+                        <select class="form-select" name="idCourse" aria-label="Select course" value="idCourse"
+                            required>
                             {{#each courses}}
-                                {{#if (compare this._id ../idCourse)}}
-                                    <option value="{{this._id}}" selected>{{this.nameSelect}}</option>
-                                {{else}}
-                                    <option value="{{this._id}}">{{this.nameSelect}}</option>
-                                {{/if}}
+                            {{#if (compare this._id ../idCourse)}}
+                            <option value="{{this._id}}" selected>{{this.nameSelect}}</option>
+                            {{else}}
+                            <option value="{{this._id}}">{{this.nameSelect}}</option>
+                            {{/if}}
                             {{/each}}
                         </select>
                     </div>
                     <div class="mb-3">
                         <select class="form-select" name="idSlot" aria-label="Select slot" required>
                             {{#each slots}}
-                                {{#if (compare this._id ../idSlot)}}
-                                    <option value="{{this._id}}" selected>{{this.name}} ({{this.startTime}} - {{this.endTime}})</option>
-                                {{else}}
-                                    <option value="{{this._id}}">{{this.name}} ({{this.startTime}} - {{this.endTime}})</option>
-                                {{/if}}
+                            {{#if (compare this._id ../idSlot)}}
+                            <option value="{{this._id}}" selected>{{this.name}} ({{this.startTime}} - {{this.endTime}})
+                            </option>
+                            {{else}}
+                            <option value="{{this._id}}">{{this.name}} ({{this.startTime}} - {{this.endTime}})</option>
+                            {{/if}}
                             {{/each}}
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Schedule Date</label>
-                        <input type="date" data-date-format="mm/dd/yyyy" class="form-control" name="date"
-                            id="date" required value="{{date}}">
+                        <input type="date" data-date-format="mm/dd/yyyy" class="form-control"
+                            name="date" id="date" required value="{{date}}">
                     </div>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </form>
